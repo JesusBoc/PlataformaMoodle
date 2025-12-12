@@ -1,0 +1,48 @@
+services:
+
+  db:
+    image: mariadb:11
+    container_name: moodle_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: moodle
+      MYSQL_USER: moodleuser
+      MYSQL_PASSWORD: moodlepass
+    volumes:
+      - dbdata:/var/lib/mysql
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    networks:
+      - moodlenet
+
+  moodle:
+    build:
+      context: .
+      dockerfile: docker/moodle/Dockerfile
+    container_name: moodle_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      MOODLE_URL: http://localhost
+      DB_HOST: db
+      DB_NAME: moodle
+      DB_USER: moodleuser
+      DB_PASS: moodlepass
+    ports:
+      - "80:80"
+    volumes:
+      - moodledata:/var/www/moodledata
+      - ./plugins/local:/var/www/html/local
+      - ./plugins/mod:/var/www/html/mod
+      - ./plugins/blocks:/var/www/html/blocks
+      - ./plugins/theme:/var/www/html/theme
+    networks:
+      - moodlenet
+
+volumes:
+  dbdata:
+  moodledata:
+
+networks:
+  moodlenet:
