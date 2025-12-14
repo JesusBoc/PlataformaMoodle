@@ -150,6 +150,8 @@ function local_curriculum_add_subject(int $planid, string $name, int $ihs): int{
     $record->planid = $planid;
     $record->subjectname = $name;
     $record->ihs = $ihs;
+    $record->timecreated = time();
+    $record->timemodified = time();
     $record->sortorder = $nextsort;
 
     return $DB->insert_record('local_curriculum_plan_subjects',$record);
@@ -190,6 +192,82 @@ function local_curriculum_update_subject(int $subjectid, string $name, int $ihs)
 
     $subject->subjectname = $name;
     $subject->ihs = $ihs;
+    $subject->timemodified = time();
 
     $DB->uptade_record('local_curriculum_plan_subjects',$subject);
+}
+
+/**
+ * Add an area to a curriculum plan.
+ *
+ * @param int $planid
+ * @param string $name
+ * @return int New area ID
+ * @throws moodle_exception
+ */
+function local_curriculum_add_areas(int $planid, string $name): int{
+    global $DB;
+
+    if (!local_curriculum_plan_is_editable($planid)){
+        throw new moodle_exception('planisnoteditable', 'local_curriculum');
+    }
+
+    $name = trim($name);
+
+    if ($name == ''){
+        throw new moodle_exception('emptysubjectname','local_curriculum');
+    }
+
+    $sql = "
+        SELECT MAX(sortorder)
+        FROM {local_curriculum_plan_areas}
+        WHERE planid = :planid
+    ";
+
+    $max = $DB -> get_field_sql($sql,
+                            ['planid'=>$planid]
+    );
+    $nextsort = ($max ?? 0) + 1;
+    $record = new stdClass();
+    $record->planid = $planid;
+    $record->areaname = $name;
+    $record->timecreated = time();
+    $record->timemodified = time();
+    $record->sortorder = $nextsort;
+
+    return $DB->insert_record('local_curriculum_plan_areas',$record);
+}
+
+/**
+ * Update an area in a curriculum plan.
+ *
+ * @param int $subjectid
+ * @param string $name
+ * @return void
+ * @throws moodle_exception
+ */
+function local_curriculum_update_area(int $areaid, string $name): void{
+    global $DB;
+
+    $area = $DB->get_record(
+        'local_curriculum_plan_areas',
+        ['id' => $areaid],
+        '*',
+        MUST_EXIST
+    );
+
+    if (!local_curriculum_plan_is_editable($area->plaind)){
+        throw new moodle_exception('planisnoteditable','local_curriculum');
+    }
+
+    $name = trim($name);
+
+    if ($name == ''){
+        throw new moodle_exception('emptysubjectname','local_curriculum');
+    }
+
+    $area->subjectname = $name;
+    $area->timemodified = time();
+
+    $DB->uptade_record('local_curriculum_plan_areas',$area);
 }
