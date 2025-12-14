@@ -9,8 +9,17 @@ use local_curriculum\model\subject;
 defined('MOODLE_INTERNAL') || die();
 
 class plan_manager {
-    public static function create_plan(int $categoryid, string $name){
-        
+    public static function create_plan(int $categoryid, string $name): ?int{
+        $name = trim($name);
+        if($name=''){
+            return null;
+        }
+        return plan::create([
+            'categoryid' => $categoryid,
+            'name' => $name,
+            'version' => 1,
+            'active' => 0
+        ]);
     }
     public static function get_active_by_category(int $categoryid): ?object{
         return plan::get_one_by(['categoryid' => $categoryid,
@@ -23,6 +32,10 @@ class plan_manager {
     }
 
     public static function activate_plan(int $planid): void {
+        $validation = self::validate_plan($planid);
+        if(!$validation['valid']){
+            return;
+        }
         $plan = plan::get_by_id($planid);
         $categoryid = $plan->categoryid;
         self::deactivate_all($categoryid);
