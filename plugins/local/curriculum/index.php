@@ -15,7 +15,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('manageplans', 'local_curriculum'));
 
 use core\output\html_writer;
-use local_curriculum\plan_manager;
+use local_curriculum\service\plan_manager;
 
 $categories = plan_manager::get_categories();
 

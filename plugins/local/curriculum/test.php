@@ -1,37 +1,94 @@
 <?php
 // This is a DEVELOPMENT TEST SCRIPT. Do not use in production.
 
-define('CLI_SCRIPT', true);
 
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot . '/local/curriculum/lib.php');
 
-echo "=== Adding subject test ===\n\n";
+require_login();
+require_capability('moodle/site:config', context_system::instance());
 
-// 🔹 1. Ajusta este ID a una categoría real de tu Moodle
-$categoryid = 1;
+use local_curriculum\model\area;
+use local_curriculum\model\subject;
 
-// 🔹 2. Intentar obtener plan activo
-$activeplan = local_curriculum_get_active_plan_by_category($categoryid);
+echo "<pre>";
+echo "=== INICIO PRUEBAS MODELO CURRICULUM ===\n\n";
 
-if ($activeplan) {
-    echo "Active plan found:\n";
-    print_r($activeplan);
-} else {
-    echo "No active plan found for category {$categoryid}\n";
-    die;
+// --------------------------------------------------
+// 1. Obtener plan activo existente
+// --------------------------------------------------
+global $DB;
+
+$planrecord = $DB->get_record('local_curriculum_plan', ['active' => 1], '*', MUST_EXIST);
+$planid = $planrecord->id;
+
+echo "✔ Plan activo encontrado: ID {$planid}\n";
+
+// --------------------------------------------------
+// 2. Crear área
+// --------------------------------------------------
+$areaid = area::create([
+    'planid'     => $planid,
+    'areaname'   => 'Área de prueba',
+    'sortorder'  => 1
+]);
+
+echo "✔ Área creada con ID {$areaid}\n";
+
+// --------------------------------------------------
+// 3. Crear asignatura con área
+// --------------------------------------------------
+$subjectid = subject::create([
+    'planid'      => $planid,
+    'subjectname' => 'Asignatura de prueba',
+    'areaid'      => $areaid,
+    'ihs'         => 4,
+    'sortorder'   => 1
+]);
+
+echo "✔ Asignatura creada con ID {$subjectid}\n";
+
+// --------------------------------------------------
+// 4. Obtener asignaturas por plan
+// --------------------------------------------------
+$subjects = subject::get_by_plan($planid);
+echo "✔ Asignaturas del plan:\n";
+
+foreach ($subjects as $s) {
+    echo "  - {$s->id} | {$s->subjectname} | areaid={$s->areaid}\n";
 }
 
-// 🔹 3. Crear nueva asignatura
-echo "\nCreating new subject...\n";
-$newsubjectid = local_curriculum_add_subject(1,'Asignatura de prueba', 1);
+// --------------------------------------------------
+// 5. Quitar asignatura del área (desasignar)
+// --------------------------------------------------
+subject::update($subjectid, [
+    'areaid' => null
+]);
 
-echo "New subject created with ID: {$newsubjectid}\n";
+echo "✔ Asignatura desasignada del área\n";
 
-// 🔹 5. Obtener asignaturas (debe estar vacío por ahora)
-$subjects = local_curriculum_get_plan_subjects($activeplan->id);
+// --------------------------------------------------
+// 6. Eliminar área (asignaturas quedan sin área)
+// --------------------------------------------------
+area::delete($areaid);
 
-echo "\nSubjects in active plan:\n";
-print_r($subjects);
+echo "✔ Área eliminada\n";
 
-echo "\n=== Test finished ===\n";
+// --------------------------------------------------
+// 7. Eliminar asignatura
+// --------------------------------------------------
+subject::delete($subjectid);
+
+echo "✔ Asignatura eliminada\n";
+
+// --------------------------------------------------
+// 8. Prueba delete_by_plan (sin efectos colaterales)
+// --------------------------------------------------
+area::delete_by_plan($planid);
+subject::delete_by_plan($planid);
+
+echo "✔ delete_by_plan ejecutado (si no había registros, no pasa nada)\n";
+
+// --------------------------------------------------
+echo "\n=== FIN PRUEBAS ===\n";
+echo "</pre>";
+

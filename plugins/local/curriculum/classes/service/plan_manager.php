@@ -1,5 +1,10 @@
 <?php
-namespace local_curriculum;
+
+namespace local_curriculum\service;
+
+use local_curriculum\model\plan;
+use local_curriculum\model\area;
+use local_curriculum\model\subject;
 
 defined('MOODLE_INTERNAL') || die();
 
