@@ -48,6 +48,49 @@ abstract class curriculum_entity {
 
         return $DB->delete_records(static::$table, [$param => $value]);
     }
+    public static function get_one_by(
+        array $conditions,
+        string $fields = '*'
+    ): ?object {
+
+        global $DB;
+    
+        return $DB->get_record(
+            static::$table,
+            $conditions,
+            $fields,
+            IGNORE_MISSING
+        ) ?: null;
+    }
+    public static function get_many_by(
+    array $conditions,
+    string $sort = '',
+    string $fields = '*'
+    ): array {
+        global $DB;
+
+        return $DB->get_records(
+            static::$table,
+            $conditions,
+            $sort,
+            $fields
+        );
+    }
+
+    /**
+    * @param string $field Field to edit
+    * @param mixed $value Scalar value to set (int|string|float|bool|null)
+    */
+    public static function set(string $field, mixed $value, array $where) {
+        global $DB;
+
+        $DB->set_field(
+            static::$table,
+            $field,
+            $value,
+            $where
+        );
+    }
 
     protected static function now(): int {
         return time();
