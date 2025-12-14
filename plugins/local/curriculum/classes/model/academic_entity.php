@@ -15,4 +15,19 @@ abstract class academic_entity extends curriculum_entity{
         return static::delete_by('planid',$planid);
     }
 
+    public static function last_order(int $planid): int{
+        global $DB;
+
+        $table = static::$table;
+        $sql = "
+        SELECT MAX(sortorder)
+        FROM {{$table}}
+        WHERE planid = :planid
+        ";
+
+        $max = $DB -> get_field_sql($sql,
+                    ['planid'=>$planid]
+        );
+        return $max;
+    }
 }

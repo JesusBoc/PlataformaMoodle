@@ -5,14 +5,16 @@ namespace local_curriculum\service;
 use local_curriculum\model\plan;
 use local_curriculum\model\area;
 use local_curriculum\model\subject;
+use core\exception\moodle_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
-class plan_manager {
+abstract class plan_manager {
     public static function create_plan(int $categoryid, string $name): ?int{
         $name = trim($name);
         if($name=''){
-            return null;
+            throw new moodle_exception('emptyname',
+                                'local_curriculum');
         }
         return plan::create([
             'categoryid' => $categoryid,
@@ -27,8 +29,13 @@ class plan_manager {
                             );
     }
 
-    public static function get_by_id(int $planid) {
+    public static function get_by_id(int $planid): ?object {
         return plan::get_by_id($planid);
+    }
+
+    public static function is_active(int $planid): bool{
+        $plan = self::get_by_id($planid);
+        return $plan->active == 1;
     }
 
     public static function activate_plan(int $planid): void {
