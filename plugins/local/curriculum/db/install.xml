@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <XMLDB PATH="local/curriculum/db"
-       VERSION="2025121300"
+       VERSION="2025121301"
        COMMENT="Curriculum plugin tables"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
@@ -30,6 +30,25 @@
       </INDEXES>
     </TABLE>
 
+    <!-- ======================== -->
+    <!-- Tabla de areas por plan  -->
+    <!-- ======================== -->
+    <TABLE NAME="local_curriculum_plan_areas" COMMENT="Areas per study plan">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="planid" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Related plan"/>
+        <FIELD NAME="areaname" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="Area name"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Creation time"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Last modification"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Display order"/>
+      </FIELDS>
+
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="plan_fk" TYPE="foreign" FIELDS="planid" REFTABLE="local_curriculum_plan" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
     <!-- ============================== -->
     <!-- Tabla de asignaturas por plan  -->
     <!-- ============================== -->
@@ -38,17 +57,22 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
         <FIELD NAME="planid" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Related plan"/>
         <FIELD NAME="subjectname" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="Subject name"/>
+        <FIELD NAME="areaid" TYPE="int" LENGTH="10" NOTNULL="false" COMMENT="Subject area"/>
         <FIELD NAME="ihs" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Weekly hours"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Creation time"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Last modification"/>
         <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Display order"/>
       </FIELDS>
 
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="plan_fk" TYPE="foreign" FIELDS="planid" REFTABLE="local_curriculum_plan" REFFIELDS="id"/>
+        <KEY NAME="area_fk" TYPE="foreign" FIELDS="areaid" REFTABLE="local_curriculum_plan_areas" REFFIELDS="id"/>
       </KEYS>
 
       <INDEXES>
         <INDEX NAME="idx_planid" UNIQUE="false" FIELDS="planid"/>
+        <INDEX NAME="idx_plan_area" UNIQUE="false" FIELDS="planid, areaid"/>
       </INDEXES>
     </TABLE>
 
