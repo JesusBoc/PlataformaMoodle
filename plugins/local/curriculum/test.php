@@ -7,8 +7,11 @@ require_once(__DIR__ . '/../../config.php');
 require_login();
 require_capability('moodle/site:config', context_system::instance());
 
-use local_curriculum\model\area;
-use local_curriculum\model\subject;
+use local_curriculum\service\PlanManager;
+use local_curriculum\service\AreaManager;
+use local_curriculum\service\SubjectManager;
+use core\exception\moodle_exception;
+
 
 echo "<pre>";
 echo "=== INICIO PRUEBAS MODELO CURRICULUM ===\n\n";
@@ -18,7 +21,9 @@ echo "=== INICIO PRUEBAS MODELO CURRICULUM ===\n\n";
 // --------------------------------------------------
 global $DB;
 
-$planrecord = $DB->get_record('local_curriculum_plan', ['active' => 1], '*', MUST_EXIST);
+$transaction = $DB->start_delegated_transaction();
+
+$planrecord = PlanManager::get_active_by_category(1);
 $planid = $planrecord->id;
 
 echo "✔ Plan activo encontrado: ID {$planid}\n";
@@ -26,68 +31,65 @@ echo "✔ Plan activo encontrado: ID {$planid}\n";
 // --------------------------------------------------
 // 2. Crear área
 // --------------------------------------------------
-$areaid = area::create([
-    'planid'     => $planid,
-    'areaname'   => 'Área de prueba',
-    'sortorder'  => 1
-]);
+$areaid = AreaManager::create_area($planid, 'Matematicas');
 
 echo "✔ Área creada con ID {$areaid}\n";
 
 // --------------------------------------------------
 // 3. Crear asignatura con área
 // --------------------------------------------------
-$subjectid = subject::create([
-    'planid'      => $planid,
-    'subjectname' => 'Asignatura de prueba',
-    'areaid'      => $areaid,
-    'ihs'         => 4,
-    'sortorder'   => 1
-]);
-
-echo "✔ Asignatura creada con ID {$subjectid}\n";
+$subjectid1 = SubjectManager::create_subject($planid, 'Algebra', $areaid, 2);
+echo "✔ Asignatura creada con ID {$subjectid1}\n";
+$subjectid2 = SubjectManager::create_subject($planid, 'Geometria', $areaid, 2);
+echo "✔ Asignatura creada con ID {$subjectid2}\n";
+$subjectid3 = SubjectManager::create_subject($planid, 'Catedra de la paz', null, 2);
+echo "✔ Asignatura creada con ID {$subjectid3}\n";
 
 // --------------------------------------------------
 // 4. Obtener asignaturas por plan
 // --------------------------------------------------
-$subjects = subject::get_by_plan($planid);
+$subjects = SubjectManager::get_by_plan($planid);
 echo "✔ Asignaturas del plan:\n";
 
 foreach ($subjects as $s) {
     echo "  - {$s->id} | {$s->subjectname} | areaid={$s->areaid}\n";
 }
 
+print_r(PlanManager::validate_plan($planid));
+
 // --------------------------------------------------
 // 5. Quitar asignatura del área (desasignar)
 // --------------------------------------------------
-subject::update($subjectid, [
-    'areaid' => null
-]);
+SubjectManager::update_area($subjectid2);
+
+$subjects = SubjectManager::get_by_plan($planid);
+
+foreach ($subjects as $s) {
+    echo "  - {$s->id} | {$s->subjectname} | areaid={$s->areaid}\n";
+}
+
 
 echo "✔ Asignatura desasignada del área\n";
 
 // --------------------------------------------------
 // 6. Eliminar área (asignaturas quedan sin área)
 // --------------------------------------------------
-area::delete($areaid);
+AreaManager::delete_area($areaid);
 
 echo "✔ Área eliminada\n";
 
-// --------------------------------------------------
-// 7. Eliminar asignatura
-// --------------------------------------------------
-subject::delete($subjectid);
+echo "✔ Asignaturas del plan:\n";
 
-echo "✔ Asignatura eliminada\n";
+$subjects = SubjectManager::get_by_plan($planid);
 
-// --------------------------------------------------
-// 8. Prueba delete_by_plan (sin efectos colaterales)
-// --------------------------------------------------
-area::delete_by_plan($planid);
-subject::delete_by_plan($planid);
+foreach ($subjects as $s) {
+    echo "  - {$s->id} | {$s->subjectname} | areaid={$s->areaid}\n";
+}
 
-echo "✔ delete_by_plan ejecutado (si no había registros, no pasa nada)\n";
+print_r(PlanManager::validate_plan($planid));
 
+
+$transaction->rollback(new moodle_exception('rollback'));
 // --------------------------------------------------
 echo "\n=== FIN PRUEBAS ===\n";
 echo "</pre>";

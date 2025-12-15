@@ -8,16 +8,16 @@ use core\exception\moodle_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
-abstract class area_manager {
+abstract class AreaManager {
     public static function create_area(int $planid, string $name) : int {
-        if(!plan_manager::is_active($planid)){
+        if(!PlanManager::is_active($planid)){
             throw new moodle_exception('planisnotactive','local_curriculum');
         }
 
         $name = trim($name);
 
         if ($name == ''){
-            throw new moodle_exception('emptysubjectname','local_curriculum');
+            throw new moodle_exception('emptyname','local_curriculum');
         }
 
         $next = (self::get_last_order($planid) ?? 0) + 1;
@@ -29,12 +29,14 @@ abstract class area_manager {
         ]);
     }
     public static function delete_area(int $areaid): void{
-        $area = area::get_by_id($areaid);
-        if (!$area) {
-            throw new moodle_exception('areanotfound','local_curriculum');
+        try {
+            $area = area::get_by_id($areaid);
+        } catch (\Throwable $th) {
+            throw new moodle_exception('areanotfound',
+                            'local_curriculum');
         }
         $planid = $area -> planid;
-        if(!plan_manager::is_active($planid)){
+        if(!PlanManager::is_active($planid)){
             throw new moodle_exception('planisnotactive','local_curriculum');
         }
         area::transactional(function() use ($areaid){
@@ -46,7 +48,19 @@ abstract class area_manager {
             area::delete($areaid);
         });
     }
+
+    public static function update_area(int $areaid, string $areaname, int $sortorder): void{
+        area::update($areaid,[
+            'areaname' => $areaname,
+            'sortorder' => $sortorder
+        ]);
+    }
+
     public static function get_last_order(int $planid): ?int{
         return area::last_order($planid);
+    }
+
+    public static function get_by_id(int $areaid): ?object{
+        return area::get_by_id($areaid);
     }
 }

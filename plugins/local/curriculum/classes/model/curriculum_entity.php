@@ -8,7 +8,7 @@ abstract class curriculum_entity {
     protected static string $table;
     public static function get_by_id(int $id) {
         global $DB;
-        return $DB->get_record(static::$table, ['id' => $id], MUST_EXIST);
+        return $DB->get_record(static::$table, ['id' => $id],'*', MUST_EXIST);
     }
 
     public static function create(array $data): int {
@@ -20,13 +20,13 @@ abstract class curriculum_entity {
         return $DB->insert_record(static::$table, (object)$data);
     }
 
-    public static function update(int $id, array $data): void{
+    public static function update(int $id, array $data): bool{
         global $DB;
 
         $data['id'] = $id;
         $data['timemodified'] = static::now();
 
-        $DB->update_record(static::$table,(object)$data);
+        return $DB->update_record(static::$table,(object)$data);
     }
 
     public static function delete(int $id): bool {
@@ -96,15 +96,17 @@ abstract class curriculum_entity {
         return time();
     }
 
-    public static function transactional(callable $callback): void {
+    public static function transactional(callable $callback): ?int {
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         
         try {
-            $callback();
+            $value = $callback();
             $transaction->allow_commit();
+            return $value;
         } catch (\Throwable $e) {
             $transaction->rollback($e);
+            return null;
         }
     }
 
