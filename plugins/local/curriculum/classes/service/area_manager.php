@@ -37,14 +37,24 @@ abstract class area_manager {
         if(!plan_manager::is_active($planid)){
             throw new moodle_exception('planisnotactive','local_curriculum');
         }
+        area::transactional(function() use ($areaid){
+            subject::set(
+                'areaid',
+                null,
+                ['areaid'=>$areaid]
+            );
+            area::delete($areaid);
+        });
+    }
+    public static function get_last_order(int $planid): ?int{
+        return area::last_order($planid);
+    }
+    private static function unset_delete(int $areaid){
         subject::set(
             'areaid',
             null,
             ['areaid'=>$areaid]
         );
         area::delete($areaid);
-    }
-    public static function get_last_order(int $planid): ?int{
-        return area::last_order($planid);
     }
 }

@@ -96,4 +96,16 @@ abstract class curriculum_entity {
         return time();
     }
 
+    public static function transactional(callable $callback): void {
+        global $DB;
+        $transaction = $DB->start_delegated_transaction();
+        
+        try {
+            $callback();
+            $transaction->allow_commit();
+        } catch (\Throwable $e) {
+            $transaction->rollback($e);
+        }
+    }
+
 }
