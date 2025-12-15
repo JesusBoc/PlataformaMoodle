@@ -3,7 +3,7 @@ moodledata
 .vscode
 docs
 
-*/test.php
+test.php
 
 !docker-compose.yml
 !docker/
