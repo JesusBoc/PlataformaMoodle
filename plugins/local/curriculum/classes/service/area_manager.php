@@ -49,12 +49,4 @@ abstract class area_manager {
     public static function get_last_order(int $planid): ?int{
         return area::last_order($planid);
     }
-    private static function unset_delete(int $areaid){
-        subject::set(
-            'areaid',
-            null,
-            ['areaid'=>$areaid]
-        );
-        area::delete($areaid);
-    }
 }
