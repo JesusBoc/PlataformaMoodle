@@ -11,6 +11,7 @@ defined('MOODLE_INTERNAL') || die();
 
 abstract class PlanManager {
     public static function create_plan(int $categoryid, string $name): ?int{
+        \core_course_category::get($categoryid, MUST_EXIST);
         $name = trim($name);
         if($name=''){
             throw new moodle_exception('emptyname',
@@ -21,6 +22,11 @@ abstract class PlanManager {
             'name' => $name,
             'version' => 1,
             'active' => 0
+        ]);
+    }
+    public static function update_plan(int $planid, string $name): bool{
+        return plan::update($planid,[
+            'name' => $name
         ]);
     }
     public static function get_active_by_category(int $categoryid): ?object{

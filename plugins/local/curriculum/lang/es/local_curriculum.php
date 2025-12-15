@@ -7,3 +7,5 @@ $string['manageplans'] = 'Gestionar planes de estudio';
 $string['plugindescription'] = 
     'Aquí podrás gestionar tus planes de estudio por nivel';
 $string['enterplugin'] = 'Entrar a panel de gestión';
+$string['planname'] = 'Nombre del plan';
+$string['emptyname'] = 'El nombre no puede estar vacío';
