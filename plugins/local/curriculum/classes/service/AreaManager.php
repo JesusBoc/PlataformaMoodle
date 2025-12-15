@@ -49,10 +49,9 @@ abstract class AreaManager {
         });
     }
 
-    public static function update_area(int $areaid, string $areaname, int $sortorder): void{
+    public static function update_area(int $areaid, string $areaname): void{
         area::update($areaid,[
-            'areaname' => $areaname,
-            'sortorder' => $sortorder
+            'areaname' => $areaname
         ]);
     }
 
@@ -62,5 +61,8 @@ abstract class AreaManager {
 
     public static function get_by_id(int $areaid): ?object{
         return area::get_by_id($areaid);
+    }
+    public static function get_by_plan(int $planid): array{
+        return area::get_many_by(['planid' => $planid]);
     }
 }

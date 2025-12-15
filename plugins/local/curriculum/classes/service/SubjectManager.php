@@ -48,6 +48,41 @@ abstract class SubjectManager
         return subject::get_by_plan($planid);
     }
 
+    public static function update_all(int $subjectid, string $subjectname, int $ihs, int $areaid = null){
+        subject::transactional(function() use ($subjectid, $subjectname, $areaid, $ihs){
+            self::update_area($subjectid, $areaid);
+            self::update_ihs($subjectid, $ihs);
+            self::update_name($subjectid, $subjectname);
+        });
+    }
+
+    public static function update_name(string $subjectid, string $subjectname){
+        self::validate_subject($subjectid);
+        $subjectname = trim($subjectname);
+        if($subjectname == ''){
+            throw new moodle_exception(
+                                'emptyname',
+                                'local_curriculum'
+            );
+        }
+        subject::update($subjectid,
+                        ['subjectname', $subjectname]
+        );
+    }
+
+    public static function update_ihs(int $subjectid, int $ihs){
+        self::validate_subject($subjectid);
+        if($ihs <= 0){
+            throw new moodle_exception(
+                                'invalidihs',
+                                'local_curriculum'
+            );
+        }
+        subject::update($subjectid,
+                        ['ihs', $ihs]
+        );
+    }
+
     public static function update_area(int $subjectid, int $newareaid = null): bool{
         try {
             $subject = self::get_by_id($subjectid);
@@ -65,6 +100,15 @@ abstract class SubjectManager
 
     public static function delete_by_id(int $subjectid): bool {
         return subject::delete($subjectid);
+    }
+
+    private static function validate_subject(int $subjectid){
+        try {
+            $subject = self::get_by_id($subjectid);
+        } catch (\Throwable $th) {
+            throw new moodle_exception('subjectnotfound',
+                        'local_curriculum');
+        }
     }
 
     private static function validate_plan(int $planid): ?object

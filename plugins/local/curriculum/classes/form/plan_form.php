@@ -4,6 +4,7 @@ namespace local_curriculum\form;
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
 require_once($CFG->libdir.'/formslib.php');
 
 class plan_form extends \moodleform {
@@ -21,7 +22,7 @@ class plan_form extends \moodleform {
         $mform->addElement('hidden', 'categoryid', $categoryid);
         $mform->setType('categoryid', PARAM_INT);
         $mform->setDefault('categoryid', $categoryid);
-        
+
         $mform->addElement('text', 'name', get_string('planname', 'local_curriculum'));
         $mform->setType('name', PARAM_TEXT); 
         $mform->addRule('name', null, 'required', null, 'client');
