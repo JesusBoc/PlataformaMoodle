@@ -9,3 +9,7 @@ $string['plugindescription'] =
 $string['enterplugin'] = 'Entrar a panel de gestión';
 $string['planname'] = 'Nombre del plan';
 $string['emptyname'] = 'El nombre no puede estar vacío';
+$string['planeditor'] = 'Editor de planes de estudio';
+$string['noarea'] = 'Asignaturas sin área';
+$string['nosubjects'] = 'Área sin asignaturas';
+$string['savestructure'] = 'Guardar la estructura del plan';

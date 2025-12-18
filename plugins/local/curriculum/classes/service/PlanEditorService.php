@@ -22,7 +22,12 @@ class PlanEditorService {
                 'name' => $area->areaname,
                 'sortorder' => $area->sortorder,
                 'is_virtual' => false,
-                'subjects' => self::map_subjects($subjects)
+                'subjects' => self::map_subjects($subjects),
+                'editurl' => (new \moodle_url(
+                    '/local/curriculum/area.php',
+                    ['planid' => $area->planid,
+                    'id' => $area->id]
+                ))
             ];
         }
         $subjects = SubjectManager::get_outside_area($planid); //Asignaturas sin area en el plan
@@ -83,7 +88,12 @@ class PlanEditorService {
                 'name' => $s->subjectname,
                 'ihs' => $s->ihs,
                 'sortorder' => $s->sortorder,
-                'areaid' => $s->areaid ?? null
+                'areaid' => $s->areaid ?? null,
+                'editurl' => (new \moodle_url(
+                    '/local/curriculum/subject.php',
+                    ['planid' => $s->planid,
+                    'id' => $s->id]
+                ))
             ];
         }
         return $result;

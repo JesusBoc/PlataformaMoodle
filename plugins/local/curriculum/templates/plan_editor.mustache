@@ -11,36 +11,42 @@
         {{/readonly}}
     </h2>
 
-    <div class="areas-container d-flex flex-wrap gap-3">
+    <ul class="areas-container list-group list-group-flush" id="areas-sortable">
         {{#areas}}
-        <div class="area-card card"
+        <li class="area-card card"
              data-areaid="{{id}}"
-             data-sortorder="{{sortorder}}">
+             data-sortorder="{{sortorder}}"
+             data-virtual="{{is_virtual}}">
 
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header">
 
-                <div class="d-flex align-items-center gap-2">
-                    {{^readonly}}
-                    {{#id}}
-                    <span class="area-drag-handle"
-                          title="{{#str}} move, core {{/str}}">
-                        {{#pix}}i/dragdrop, core{{/pix}}
-                    </span>
-                    {{/id}}
-                    {{/readonly}}
-
+                <div class="d-flex align-items-center gap-2 justify-content-between">
+                    <span>
                     <strong>{{name}}</strong>
+                    </span>
+                    {{^readonly}}
+                    {{^is_virtual}}
+                    {{#id}}
+                    <div class="area-actions">
+                        <a href="{{editurl}}" class="edit-area" data-areaid="{{id}}">✏️</a>
+                        <a href="#" class="delete-area" data-areaid="{{id}}">🗑️</a>
+                        <div class="area-order-controls btn-group btn-group-sm">
+                        <button type="button"
+                                class="btn btn-outline-secondary move-area-up"
+                                aria-label="{{#str}} moveup {{/str}}">
+                            ↑
+                        </button>
+                        <button type="button"
+                                class="btn btn-outline-secondary move-area-down"
+                                aria-label="{{#str}} movedown {{/str}}">
+                            ↓
+                        </button>
+                    </div>
+                    </div>
+                    {{/id}}
+                    {{/is_virtual}}
+                    {{/readonly}}
                 </div>
-
-                {{^readonly}}
-                {{#id}}
-                <div class="area-actions">
-                    <a href="#" class="edit-area" data-areaid="{{id}}">✏️</a>
-                    <a href="#" class="delete-area" data-areaid="{{id}}">🗑️</a>
-                </div>
-                {{/id}}
-                {{/readonly}}
-
             </div>
 
             <ul class="list-group list-group-flush subjects"
@@ -52,24 +58,30 @@
                     data-sortorder="{{sortorder}}">
 
                     <span class="d-flex align-items-center gap-2">
-                        <span class="subject-drag-handle"
-                              title="{{#str}} move, core {{/str}}">
-                            {{#pix}}i/dragdrop, core{{/pix}}
-                        </span>
-
                         {{name}}
                         <small class="text-muted">
-                            ({{ihs}} IHS)
+                            ({{ihs}} hora(s) semanales)
                         </small>
                     </span>
 
                     {{^readonly}}
                     <span class="subject-actions">
-                        <a href="#" class="edit-subject" data-subjectid="{{id}}">✏️</a>
+                        <a href="{{editurl}}" class="edit-subject" data-subjectid="{{id}}">✏️</a>
                         <a href="#" class="delete-subject" data-subjectid="{{id}}">🗑️</a>
+                        <div class="subject-order-controls btn-group btn-group-sm">
+                        <button type="button"
+                                class="btn btn-outline-secondary move-subject-up"
+                                aria-label="{{#str}} moveup {{/str}}">
+                            ↑
+                        </button>
+                        <button type="button"
+                                class="btn btn-outline-secondary move-subject-down"
+                                aria-label="{{#str}} movedown {{/str}}">
+                            ↓
+                        </button>
+                    </div>
                     </span>
                     {{/readonly}}
-
                 </li>
                 {{/subjects}}
 
@@ -80,10 +92,10 @@
                 {{/subjects}}
 
             </ul>
-        </div>
+        </li>
         {{/areas}}
 
-    </div>
+    </ul>
 
     {{^readonly}}
     <div class="mt-4">

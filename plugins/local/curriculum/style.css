@@ -10,3 +10,11 @@
 .sortable-list-item {
     transition: background-color .2s;
 }
+
+.areas-container {
+    display: block;
+}
+
+.area-card {
+    margin-bottom: 1rem;
+}
