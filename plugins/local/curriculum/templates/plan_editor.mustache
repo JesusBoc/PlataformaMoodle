@@ -12,27 +12,35 @@
     </h2>
 
     <div class="areas-container d-flex flex-wrap gap-3">
-
         {{#areas}}
         <div class="area-card card"
              data-areaid="{{id}}"
              data-sortorder="{{sortorder}}">
 
             <div class="card-header d-flex justify-content-between align-items-center">
-                <strong>{{name}}</strong>
+
+                <div class="d-flex align-items-center gap-2">
+                    {{^readonly}}
+                    {{#id}}
+                    <span class="area-drag-handle"
+                          title="{{#str}} move, core {{/str}}">
+                        {{#pix}}i/dragdrop, core{{/pix}}
+                    </span>
+                    {{/id}}
+                    {{/readonly}}
+
+                    <strong>{{name}}</strong>
+                </div>
 
                 {{^readonly}}
                 {{#id}}
                 <div class="area-actions">
-                    <a href="#" class="edit-area" data-areaid="{{id}}">
-                        ✏️
-                    </a>
-                    <a href="#" class="delete-area" data-areaid="{{id}}">
-                        🗑️
-                    </a>
+                    <a href="#" class="edit-area" data-areaid="{{id}}">✏️</a>
+                    <a href="#" class="delete-area" data-areaid="{{id}}">🗑️</a>
                 </div>
                 {{/id}}
                 {{/readonly}}
+
             </div>
 
             <ul class="list-group list-group-flush subjects"
@@ -43,7 +51,12 @@
                     data-subjectid="{{id}}"
                     data-sortorder="{{sortorder}}">
 
-                    <span>
+                    <span class="d-flex align-items-center gap-2">
+                        <span class="subject-drag-handle"
+                              title="{{#str}} move, core {{/str}}">
+                            {{#pix}}i/dragdrop, core{{/pix}}
+                        </span>
+
                         {{name}}
                         <small class="text-muted">
                             ({{ihs}} IHS)
@@ -52,14 +65,11 @@
 
                     {{^readonly}}
                     <span class="subject-actions">
-                        <a href="#" class="edit-subject" data-subjectid="{{id}}">
-                            ✏️
-                        </a>
-                        <a href="#" class="delete-subject" data-subjectid="{{id}}">
-                            🗑️
-                        </a>
+                        <a href="#" class="edit-subject" data-subjectid="{{id}}">✏️</a>
+                        <a href="#" class="delete-subject" data-subjectid="{{id}}">🗑️</a>
                     </span>
                     {{/readonly}}
+
                 </li>
                 {{/subjects}}
 
@@ -85,11 +95,11 @@
 
     {{#js}}
         require(['local_curriculum/plan_editor'], function(editor) {
-        editor.init({
-            planid: {{plan.id}},
-            readonly: {{readonly}}
+            editor.init({
+                planid: {{plan.id}},
+                readonly: {{readonly}}
+            });
         });
-    });
     {{/js}}
 
 </div>

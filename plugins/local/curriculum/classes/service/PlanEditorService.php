@@ -19,7 +19,7 @@ class PlanEditorService {
 
             $structure[] = [
                 'id' => $area->id,
-                'name' => $area->name,
+                'name' => $area->areaname,
                 'sortorder' => $area->sortorder,
                 'is_virtual' => false,
                 'subjects' => self::map_subjects($subjects)
@@ -33,7 +33,7 @@ class PlanEditorService {
             'is_virtual' => true,
             'subjects' => self::map_subjects($subjects)
         ];
-
+        debugging(print_r($structure, true), DEBUG_DEVELOPER);
         return [
             'plan' => $plan,
             'areas' => $structure,
@@ -75,12 +75,17 @@ class PlanEditorService {
     }
 
     private static function map_subjects(array $subjects): array {
-    return array_map(fn($s) => [
-                    'id' => $s->id,
-                    'name' => $s->subjectname,
-                    'ihs' => $s->ihs,
-                    'sortorder' => $s->sortorder,
-                    'areaid' => $s->areaid ?? null
-                ], $subjects);
+        $result = [];
+
+        foreach ($subjects as $s) {
+            $result[] = [
+                'id' => $s->id,
+                'name' => $s->subjectname,
+                'ihs' => $s->ihs,
+                'sortorder' => $s->sortorder,
+                'areaid' => $s->areaid ?? null
+            ];
+        }
+        return $result;
     }
 }

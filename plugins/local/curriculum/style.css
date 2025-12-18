@@ -1,0 +1,12 @@
+.curriculum-plan-editor .area-drag-handle:active,
+.curriculum-plan-editor .subject-drag-handle:active {
+    cursor: grabbing;
+}
+
+.sortable-list-is-dragging {
+    background-color: #f8f9fa;
+}
+
+.sortable-list-item {
+    transition: background-color .2s;
+}
