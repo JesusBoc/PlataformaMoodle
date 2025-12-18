@@ -55,6 +55,12 @@ abstract class AreaManager {
         ]);
     }
 
+    public static function update_order(int $areaid, int $sortorder): bool{
+        return area::update($areaid, [
+            'sortorder' => $sortorder
+        ]);
+    }
+
     public static function get_last_order(int $planid): ?int{
         return area::last_order($planid);
     }

@@ -1,0 +1,95 @@
+<div class="curriculum-plan-editor"
+     data-planid="{{plan.id}}"
+     data-readonly="{{readonly}}">
+
+    <h2 class="mb-3">
+        {{plan.name}}
+        {{#readonly}}
+            <span class="badge bg-secondary">
+                {{#str}} readonly, local_curriculum {{/str}}
+            </span>
+        {{/readonly}}
+    </h2>
+
+    <div class="areas-container d-flex flex-wrap gap-3">
+
+        {{#areas}}
+        <div class="area-card card"
+             data-areaid="{{id}}"
+             data-sortorder="{{sortorder}}">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <strong>{{name}}</strong>
+
+                {{^readonly}}
+                {{#id}}
+                <div class="area-actions">
+                    <a href="#" class="edit-area" data-areaid="{{id}}">
+                        ✏️
+                    </a>
+                    <a href="#" class="delete-area" data-areaid="{{id}}">
+                        🗑️
+                    </a>
+                </div>
+                {{/id}}
+                {{/readonly}}
+            </div>
+
+            <ul class="list-group list-group-flush subjects"
+                data-areaid="{{id}}">
+
+                {{#subjects}}
+                <li class="list-group-item subject-item d-flex justify-content-between align-items-center"
+                    data-subjectid="{{id}}"
+                    data-sortorder="{{sortorder}}">
+
+                    <span>
+                        {{name}}
+                        <small class="text-muted">
+                            ({{ihs}} IHS)
+                        </small>
+                    </span>
+
+                    {{^readonly}}
+                    <span class="subject-actions">
+                        <a href="#" class="edit-subject" data-subjectid="{{id}}">
+                            ✏️
+                        </a>
+                        <a href="#" class="delete-subject" data-subjectid="{{id}}">
+                            🗑️
+                        </a>
+                    </span>
+                    {{/readonly}}
+                </li>
+                {{/subjects}}
+
+                {{^subjects}}
+                <li class="list-group-item text-muted">
+                    {{#str}} nosubjects, local_curriculum {{/str}}
+                </li>
+                {{/subjects}}
+
+            </ul>
+        </div>
+        {{/areas}}
+
+    </div>
+
+    {{^readonly}}
+    <div class="mt-4">
+        <button class="btn btn-primary" id="save-structure">
+            {{#str}} savestructure, local_curriculum {{/str}}
+        </button>
+    </div>
+    {{/readonly}}
+
+    {{#js}}
+        require(['local_curriculum/plan_editor'], function(editor) {
+        editor.init({
+            planid: {{plan.id}},
+            readonly: {{readonly}}
+        });
+    });
+    {{/js}}
+
+</div>

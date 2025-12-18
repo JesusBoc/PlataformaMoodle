@@ -141,6 +141,10 @@ abstract class PlanManager {
         plan::set('active', 0, ['categoryid' => $categoryid]);
     }
 
+    public static function transactional(callable $callback){
+        return plan::transactional($callback);
+    }
+
     /**
      * Obtiene las categorías de cursos (niveles académicos).
      *

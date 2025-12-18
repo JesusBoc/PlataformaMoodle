@@ -12,6 +12,22 @@ abstract class SubjectManager
     public static function get_by_id(int $subjectid): ?object{
         return subject::get_by_id($subjectid);
     }
+    public static function get_by_area(int $areaid): array{
+        return subject::get_many_by([
+            'areaid' => $areaid
+        ]);
+    }
+    public static function get_outside_area(int $planid): array{
+        return subject::get_many_by([
+            'areaid' => null,
+            'planid' => $planid
+        ]);
+    }
+    public static function update_order(int $subjectid, int $sortorder): bool{
+        return subject::update($subjectid, [
+            'sortorder' => $sortorder
+        ]);
+    }
     public static function create_subject(int $planid, 
                     string $subjectname, 
                     ?int $areaid, 

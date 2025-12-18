@@ -10,13 +10,12 @@ $context = context_system::instance();
 require_capability('local/curriculum:manageplans', $context);
 
 $PAGE->set_context($context);
-$PAGE->set_url('/local/curriculum/plan.php');
 
 $categoryid = required_param('categoryid', PARAM_INT);
 $planid = optional_param('id', 0, PARAM_INT);  // Obtener el ID del plan (si lo hay)
 $plan = null;
 
-$PAGE->set_url('/local/curriculum/area.php', ['planid' => $planid]);
+$PAGE->set_url('/local/curriculum/plan.php', ['categoryid' => $categoryid]);
 $PAGE->set_context($context);
 
 if($planid){

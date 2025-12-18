@@ -15,9 +15,9 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('manageplans', 'local_curriculum'));
 
 use core\output\html_writer;
-use local_curriculum\service\plan_manager;
+use local_curriculum\service\PlanManager;
 
-$categories = plan_manager::get_categories();
+$categories = PlanManager::get_categories();
 
 if (empty($categories)){
     echo $OUTPUT -> notification('No hay categorías disponibles.','warning');
@@ -26,7 +26,7 @@ if (empty($categories)){
 
     foreach($categories as $category){
         $url = new moodle_url(
-            'local/curriculum/index.php',
+            'plan.php',
             ['categoryid' => $category->id] 
         );
         echo html_writer::tag(
