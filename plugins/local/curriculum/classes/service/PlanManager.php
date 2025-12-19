@@ -34,6 +34,9 @@ abstract class PlanManager {
                                 'active' => 1]
                             );
     }
+    public static function get_by_category(int $categoryid): ?array{
+        return plan::get_many_by(['categoryid' => $categoryid]);
+    }
 
     public static function get_by_id(int $planid): ?object {
         return plan::get_by_id($planid);

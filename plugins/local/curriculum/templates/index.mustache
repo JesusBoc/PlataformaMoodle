@@ -1,0 +1,79 @@
+<main class="curriculum-index container my-4">
+
+    <header class="mb-4">
+        <h2>
+            {{#str}} manageplans, local_curriculum {{/str}}
+        </h2>
+        <p class="text-muted">
+            {{#str}} plugindescription, local_curriculum {{/str}}
+        </p>
+    </header>
+
+    <section class="levels-container d-flex flex-wrap gap-3">
+
+        {{#categories}}
+        <article class="level-card card flex-fill d-flex flex-column" style="min-width: 300px; max-width: 380px;">
+
+            <header class="card-header">
+                <strong>{{name}}</strong>
+            </header>
+
+            <ul class="list-group list-group-flush flex-grow-1">
+
+                {{#plans}}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <span class="fw-semibold">{{name}}</span>
+                        <br>
+                        <small class="text-muted">
+                            {{#str}} version, local_curriculum {{/str}}: {{version}}
+                        </small>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        {{#active}}
+                            <span class="badge bg-success">
+                                {{#str}} active, local_curriculum {{/str}}
+                            </span>
+                        {{/active}}
+                        {{^active}}
+                            <span class="badge bg-secondary">
+                                {{#str}} inactive, local_curriculum {{/str}}
+                            </span>
+                        {{/active}}
+
+                        <a href="{{edit_url}}" class="btn btn-sm btn-primary">
+                            {{#str}} edit, local_curriculum {{/str}}
+                        </a>
+                    </div>
+
+                </li>
+                {{/plans}}
+
+                {{^plans}}
+                <li class="list-group-item text-muted text-center">
+                    {{#str}} noplans, local_curriculum {{/str}}
+                </li>
+                {{/plans}}
+
+            </ul>
+
+            <footer class="card-footer text-center">
+                <a href="{{create_url}}" class="btn btn-sm btn-outline-primary">
+                    {{#str}} createplan, local_curriculum {{/str}}
+                </a>
+            </footer>
+
+        </article>
+        {{/categories}}
+
+        {{^categories}}
+        <div class="alert alert-info w-100">
+            {{#str}} nolevels, local_curriculum {{/str}}
+        </div>
+        {{/categories}}
+
+    </section>
+
+</main>

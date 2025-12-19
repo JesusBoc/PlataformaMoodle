@@ -13,3 +13,4 @@ $string['planeditor'] = 'Editor de planes de estudio';
 $string['noarea'] = 'Asignaturas sin área';
 $string['nosubjects'] = 'Área sin asignaturas';
 $string['savestructure'] = 'Guardar la estructura del plan';
+$string['nolevels'] = 'No se han definido niveles, define por lo menos una categoría';
