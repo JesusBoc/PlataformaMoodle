@@ -109,5 +109,19 @@ abstract class curriculum_entity {
             return null;
         }
     }
+    public static function last_order(int $categoryid): ?int{
+        global $DB;
 
+        $table = static::$table;
+        $sql = "
+        SELECT MAX(sortorder)
+        FROM {{$table}}
+        WHERE categoryid = :categoryid
+        ";
+
+        $max = $DB -> get_field_sql($sql,
+                    ['categoryid'=>$categoryid]
+        );
+        return $max;
+    }
 }

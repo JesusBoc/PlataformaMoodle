@@ -13,16 +13,20 @@ abstract class PlanManager {
     public static function create_plan(int $categoryid, string $name): ?int{
         \core_course_category::get($categoryid, MUST_EXIST);
         $name = trim($name);
-        if($name=''){
+        if($name===''){
             throw new moodle_exception('emptyname',
                                 'local_curriculum');
         }
-        return plan::create([
-            'categoryid' => $categoryid,
-            'name' => $name,
-            'version' => 1,
-            'active' => 0
-        ]);
+        $value = self::transactional(function () use ($categoryid, $name) {
+            self::deactivate_all($categoryid);
+            plan::create([
+                'categoryid' => $categoryid,
+                'name' => $name,
+                'version' => 1,
+                'active' => 1
+            ]);
+        });
+        return $value;
     }
     public static function update_plan(int $planid, string $name): bool{
         return plan::update($planid,[

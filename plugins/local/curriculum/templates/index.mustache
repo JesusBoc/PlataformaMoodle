@@ -2,7 +2,7 @@
 
     <header class="mb-4">
         <h2>
-            {{#str}} manageplans, local_curriculum {{/str}}
+            {{#str}} avaliableplans, local_curriculum {{/str}}
         </h2>
         <p class="text-muted">
             {{#str}} plugindescription, local_curriculum {{/str}}
@@ -36,16 +36,18 @@
                             <span class="badge bg-success">
                                 {{#str}} active, local_curriculum {{/str}}
                             </span>
+                            <a href="{{editurl}}" class="btn btn-sm btn-primary">
+                                {{#str}} edit, local_curriculum {{/str}}
+                            </a>
                         {{/active}}
                         {{^active}}
                             <span class="badge bg-secondary">
                                 {{#str}} inactive, local_curriculum {{/str}}
                             </span>
+                            <a href="{{editurl}}" class="btn btn-sm btn-primary">
+                                {{#str}} check, local_curriculum {{/str}}
+                            </a>
                         {{/active}}
-
-                        <a href="{{edit_url}}" class="btn btn-sm btn-primary">
-                            {{#str}} edit, local_curriculum {{/str}}
-                        </a>
                     </div>
 
                 </li>
@@ -60,7 +62,7 @@
             </ul>
 
             <footer class="card-footer text-center">
-                <a href="{{create_url}}" class="btn btn-sm btn-outline-primary">
+                <a href="{{addurl}}" class="btn btn-sm btn-outline-primary">
                     {{#str}} createplan, local_curriculum {{/str}}
                 </a>
             </footer>
