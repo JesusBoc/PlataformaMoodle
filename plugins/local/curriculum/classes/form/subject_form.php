@@ -40,7 +40,7 @@ class subject_form extends \moodleform {
         $mform->setType('subjectname', PARAM_NOTAGS);
         $mform->addRule('subjectname', null, 'required', null, 'client');
 
-        $mform->addElement('number', 'ihs', get_string('ihs', 'local_curriculum'));
+        $mform->addElement('text', 'ihs', get_string('ihs', 'local_curriculum'));
         $mform->setType('ihs', PARAM_INT);
 
         if($subject){

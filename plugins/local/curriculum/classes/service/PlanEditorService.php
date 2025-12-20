@@ -27,6 +27,11 @@ class PlanEditorService {
                     '/local/curriculum/area.php',
                     ['planid' => $area->planid,
                     'id' => $area->id]
+                )),
+                'addurl' => (new \moodle_url(
+                    '/local/curriculum/subject.php',
+                    ['planid' => $area->planid,
+                    'areaid' => $area->id]
                 ))
             ];
         }
@@ -36,9 +41,12 @@ class PlanEditorService {
             'name' => get_string('noarea','local_curriculum'),
             'sortorder' => PHP_INT_MAX,
             'is_virtual' => true,
-            'subjects' => self::map_subjects($subjects)
+            'subjects' => self::map_subjects($subjects),
+            'addurl' => (new \moodle_url(
+                    '/local/curriculum/subject.php',
+                    ['planid' => $planid]
+                ))
         ];
-        debugging(print_r($structure, true), DEBUG_DEVELOPER);
         return [
             'plan' => $plan,
             'areas' => $structure,

@@ -65,7 +65,7 @@ abstract class SubjectManager
     }
 
     public static function update_all(int $subjectid, string $subjectname, int $ihs, int $areaid = null){
-        subject::transactional(function() use ($subjectid, $subjectname, $areaid, $ihs){
+        subject::transactional(function() use ($subjectid, $subjectname, $areaid, $ihs){ 
             self::update_area($subjectid, $areaid);
             self::update_ihs($subjectid, $ihs);
             self::update_name($subjectid, $subjectname);
@@ -82,7 +82,7 @@ abstract class SubjectManager
             );
         }
         subject::update($subjectid,
-                        ['subjectname', $subjectname]
+                        ['subjectname' => $subjectname]
         );
     }
 
@@ -95,7 +95,7 @@ abstract class SubjectManager
             );
         }
         subject::update($subjectid,
-                        ['ihs', $ihs]
+                        ['ihs' => $ihs]
         );
     }
 

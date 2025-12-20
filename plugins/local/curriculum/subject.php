@@ -12,6 +12,7 @@ require_capability('local/curriculum:manageplans', $context);
 
 $planid = required_param('planid', PARAM_INT);
 $subjectid = optional_param('id', 0, PARAM_INT);  // Obtener el ID de la asignatura (si la hay)
+$subjectarea = optional_param('areaid', 0, PARAM_INT);  // Obtener el ID de la asignatura (si la hay)
 $subject = null;
 $areasraw = AreaManager::get_by_plan($planid);
 $areas = [];
@@ -32,6 +33,9 @@ if ($subjectid) {
         throw new moodle_exception('invalidsubject', 'local_curriculum');
     }
 }
+if ($area) {
+    
+}
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
@@ -47,16 +51,18 @@ if ($form->is_cancelled()) {
 }
 
 if ($data = $form->get_data()) {
+    $areaid = $data->areaid == 0 ? null : $data->areaid;
     if (!empty($data->id)) {
         SubjectManager::update_all($data->id,
                     $data->subjectname,
                     $data->ihs,
-                    $data->areaid
+                    $areaid
             );
     } else {
+        echo $data->areaid;
         SubjectManager::create_subject($data->planid, 
                         $data->subjectname,
-                        $data->areaid,
+                        $areaid,
                         $data->ihs
                     );
     }

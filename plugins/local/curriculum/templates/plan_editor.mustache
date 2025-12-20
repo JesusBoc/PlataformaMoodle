@@ -11,14 +11,15 @@
         {{/readonly}}
     </h2>
 
-    <ul class="areas-container list-group list-group-flush" style="min-width: 300px; max-width: 380px;" id="areas-sortable">
+    <section class="areas-container d-flex flex-wrap gap-3" id="areas-sortable">
         {{#areas}}
-        <li class="area-card card"
-             data-areaid="{{id}}"
-             data-sortorder="{{sortorder}}"
-             data-virtual="{{is_virtual}}">
+        <article class="area-card card flex-fill d-flex flex-column"
+            style="min-width: 400px; max-width: 500px;"
+            data-areaid="{{id}}"
+            data-sortorder="{{sortorder}}"
+            data-virtual="{{is_virtual}}">
 
-            <div class="card-header">
+            <header class="card-header">
 
                 <div class="d-flex align-items-center gap-2 justify-content-between">
                     <span>
@@ -47,9 +48,9 @@
                     {{/is_virtual}}
                     {{/readonly}}
                 </div>
-            </div>
+            </header>
 
-            <ul class="list-group list-group-flush subjects"
+            <ul class="list-group list-group-flush flex-grow-1 subjects"
                 data-areaid="{{id}}">
 
                 {{#subjects}}
@@ -60,13 +61,13 @@
                     <span class="d-flex align-items-center gap-2">
                         {{name}}
                         <small class="text-muted">
-                            ({{ihs}} hora(s) semanales)
+                            ({{ihs}} hora(s) semanal(es))
                         </small>
                     </span>
 
                     {{^readonly}}
                     <span class="subject-actions">
-                        <a href="{{editurl}}" class="edit-subject" data-subjectid="{{id}}">✏️</a>
+                        <a href="#" class="edit-subject" data-subjectid="{{id}}">✏️</a>
                         <a href="#" class="delete-subject" data-subjectid="{{id}}">🗑️</a>
                         <div class="subject-order-controls btn-group btn-group-sm">
                         <button type="button"
@@ -92,13 +93,21 @@
                 {{/subjects}}
 
             </ul>
-        </li>
+            <footer class="card-footer text-center">
+                <a href="#" class="btn btn-sm btn-outline-primary add-subject" data-areaid="{{../id}}">
+                    {{#str}} addsubject, local_curriculum {{/str}}
+                </a>
+            </footer>
+        </article>
         {{/areas}}
 
-    </ul>
+    </section>
 
     {{^readonly}}
     <div class="mt-4">
+        <a href="#" class="btn btn-outline-primary add-area">
+                    {{#str}} addarea, local_curriculum {{/str}}
+        </a>
         <button class="btn btn-primary" id="save-structure">
             {{#str}} savestructure, local_curriculum {{/str}}
         </button>
