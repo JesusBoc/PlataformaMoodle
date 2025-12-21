@@ -18,7 +18,7 @@ class area_modal extends dynamic_form {
             if ($area) {
                 $this->set_data([
                     'areaid' => $areaid,
-                    'areaname' => $area->subjectname,
+                    'areaname' => $area->areaname,
                 ]);
             }
         }
@@ -68,16 +68,15 @@ class area_modal extends dynamic_form {
     public function process_dynamic_submission() {
         $data = $this->get_data();
         if (!empty($data->areaid)) {
-            AreaManager::update_all($data->subjectid,
-                        $data->subjectname,
-                        $data->ihs
-                );
+            AreaManager::update_area(
+                $data->areaid,
+                $data->areaname
+            );
         } else {
-            SubjectManager::create_subject($data->planid, 
-                            $data->subjectname,
-                            $areaid,
-                            $data->ihs
-                        );
+            AreaManager::create_area(
+                $data->planid,
+                $data->areaname
+            );
         }
         return [
             'id' => $data->id ?? null

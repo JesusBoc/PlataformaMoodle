@@ -67,7 +67,8 @@
 
                     {{^readonly}}
                     <span class="subject-actions">
-                        <a href="#" class="edit-subject" data-subjectid="{{id}}">✏️</a>
+                        <a href="#" class="edit-subject" 
+                        data-subjectid="{{id}}">✏️</a>
                         <a href="#" class="delete-subject" data-subjectid="{{id}}">🗑️</a>
                         <div class="subject-order-controls btn-group btn-group-sm">
                         <button type="button"
@@ -87,14 +88,15 @@
                 {{/subjects}}
 
                 {{^subjects}}
-                <li class="list-group-item text-muted">
+                <li class="list-group-item text-muted"
+                    style="margin:auto">
                     {{#str}} nosubjects, local_curriculum {{/str}}
                 </li>
                 {{/subjects}}
 
             </ul>
             <footer class="card-footer text-center">
-                <a href="#" class="btn btn-sm btn-outline-primary add-subject" data-areaid="{{../id}}">
+                <a href="#" class="btn btn-sm btn-outline-primary add-subject" data-areaid="{{id}}">
                     {{#str}} addsubject, local_curriculum {{/str}}
                 </a>
             </footer>

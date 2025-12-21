@@ -62,7 +62,7 @@ class subject_modal extends dynamic_form {
         $areas = [];
 
         foreach ($areasraw as $area) {
-            $areas[$area->id] = $area->name;
+            $areas[$area->id] = $area->areaname;
         }
 
         $areaoptions = [0 => get_string('noarea', 'local_curriculum')] + $areas;
@@ -84,6 +84,7 @@ class subject_modal extends dynamic_form {
                     get_string('area', 'local_curriculum'),
                     $areaoptions
                 );
+        $mform->setDefault('areaid', $areaid);
 
         $mform->addElement('text', 'ihs', get_string('ihs', 'local_curriculum'));
         $mform->setType('ihs', PARAM_INT);
@@ -95,7 +96,8 @@ class subject_modal extends dynamic_form {
         if (!empty($data->subjectid)) {
             SubjectManager::update_all($data->subjectid,
                         $data->subjectname,
-                        $data->ihs
+                        $data->ihs,
+                        $areaid
                 );
         } else {
             SubjectManager::create_subject($data->planid, 
