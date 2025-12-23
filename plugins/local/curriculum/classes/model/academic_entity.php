@@ -15,6 +15,11 @@ abstract class academic_entity extends curriculum_entity{
         return static::delete_by('planid',$planid);
     }
 
+    public static function get_many_by(array $conditions, string $sort = 'sortorder ASC', string $fields = '*'): array
+    {
+        return parent::get_many_by($conditions, $sort, $fields);
+    }
+
     public static function last_order(int $planid): ?int{
         global $DB;
 

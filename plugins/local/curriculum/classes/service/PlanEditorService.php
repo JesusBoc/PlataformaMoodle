@@ -53,19 +53,19 @@ class PlanEditorService {
             'readonly' => $plan->active == 0
         ];
     }
-    public function save_structure(int $planid, array $structure): void {
+    public static function save_structure(int $planid, array $areas): void {
         PlanManager::transactional(
-            function() use ($planid, $structure){
+            function() use ($planid, $areas){
                 //Trata de encontrar el plan, arroja excepcion
                 //si no lo hace
                 $_ = PlanManager::get_by_id($planid);
 
-                if(!isset($structure['areas']) || !is_array($structure['areas'])){
+                if(!isset($areas) || !is_array($areas)){
                     throw new moodle_exception('invalidstructure',
                                     'local_curriculum');
                 }
 
-                foreach($structure['areas'] as $area){
+                foreach($areas as $area){
                     if($area['id']!==null){
                         $areaplanid = AreaManager::get_by_id($area['id'])->planid;
                         if($planid != $areaplanid){
