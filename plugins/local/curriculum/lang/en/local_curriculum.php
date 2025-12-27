@@ -40,3 +40,6 @@ $string['subjectdeleted'] = 'Asignatura eliminada correctamente';
 $string['subjectdeleteerror'] = 'No se pudo eliminar la asignatura';
 $string['structuresaved'] = 'Estructura del plan guardada correctamente';
 $string['structuresaveerror'] = 'No se pudo guardar la estructura del plan';
+$string['deleteareaconfirm'] = '¿Seguro que deseas eliminar esta área?';
+$string['areadeleted'] = 'Área eliminada correctamente';
+$string['areadeleteerror'] = 'No se pudo eliminar el área';

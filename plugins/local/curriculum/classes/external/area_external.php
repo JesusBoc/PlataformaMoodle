@@ -9,26 +9,26 @@ use external_api;
 use external_function_parameters;
 use external_value;
 use context_system;
-use local_curriculum\service\SubjectManager;
+use local_curriculum\service\AreaManager;
 
-class subject_external extends external_api {
+class area_external extends external_api {
 
     public static function delete_parameters() {
         return new external_function_parameters([
-            'id' => new external_value(PARAM_INT, 'Subject ID'),
+            'id' => new external_value(PARAM_INT, 'Area ID'),
         ]);
     }
 
-    public static function delete($subjectid) {
+    public static function delete($areaid) {
         $params = self::validate_parameters(self::delete_parameters(), [
-            'id' => $subjectid,
+            'id' => $areaid,
         ]);
 
         $context = context_system::instance();
         self::validate_context($context);
         require_capability('local/curriculum:manageplans', $context);
 
-        SubjectManager::delete_by_id($params['id']);
+        AreaManager::delete_area($params['id']);
 
         return true;
     }

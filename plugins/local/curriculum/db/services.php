@@ -8,6 +8,14 @@ $functions = [
         'ajax'        => true,
         'capabilities'=> 'local/curriculum:manageplans',
     ],
+    'local_curriculum_delete_area' => [
+        'classname'   => 'local_curriculum\\external\\area_external',
+        'methodname'  => 'delete',
+        'description' => 'Delete an area',
+        'type'        => 'write',
+        'ajax'        => true,
+        'capabilities'=> 'local/curriculum:manageplans',
+    ],
     'local_curriculum_save_structure' => [
         'classname'   => 'local_curriculum\\external\\plan_external',
         'methodname'  => 'save_structure',
