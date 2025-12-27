@@ -19,7 +19,7 @@ class IndexService {
                     ['categoryid' => $category->id]
                 ))->out(false),
                 'cloneurl' => (new \moodle_url(
-                    '/local/curriculum/plan_clone.php',
+                    '/local/curriculum/clone.php',
                     ['categoryid' => $category->id]
                 ))->out(false),
             ];

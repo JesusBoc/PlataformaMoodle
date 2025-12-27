@@ -43,3 +43,7 @@ $string['structuresaveerror'] = 'No se pudo guardar la estructura del plan';
 $string['deleteareaconfirm'] = '¿Seguro que deseas eliminar esta área?';
 $string['areadeleted'] = 'Área eliminada correctamente';
 $string['areadeleteerror'] = 'No se pudo eliminar el área';
+$string['cloneplan'] = 'Clonar activo';
+$string['plancloned'] = 'Plan clonado con éxito';
+$string['plancloneerror'] = 'Error al clonar el plan';
+$string['area'] = 'Área';

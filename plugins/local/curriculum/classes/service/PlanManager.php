@@ -75,7 +75,7 @@ abstract class PlanManager {
         return plan::transactional(function() use ($categoryid) {
             $plan = self::get_active_by_category($categoryid);
             if (!$plan) {
-                return null;
+                throw new moodle_exception('noactiveplanincategory', 'local_curriculum');
             }
 
             $clonedplan = plan::create([
