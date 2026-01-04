@@ -3,6 +3,7 @@ namespace local_coursebuilder\service;
 
 require_once($CFG->dirroot . '/course/lib.php');
 
+use core\router\schema\objects\array_of_things;
 use local_coursebuilder\domain\model\CourseAction;
 use local_coursebuilder\domain\model\SubjectDTO;
 use stdClass;
@@ -10,10 +11,43 @@ use stdClass;
 defined('MOODLE_INTERNAL') || die();
 
 class CourseCreationService{
+
+    /**
+     * @param array<int, CourseAction[]> $actionmap
+     * @return array<int, array{action: string, subject: string, cohort: string, year: int, shortname: string, fullname: string, exists: bool}[]> $preview
+     */
+    public function build_preview(array $actionmap): array{
+        $preview = [];
+
+        foreach ($actionmap as $cohortid => $actions) {
+            foreach ($actions as $action) {
+
+                $preview[$cohortid][] = [
+                    'action'     => $action->action,
+                    'subject'    => $action->subject->name,
+                    'cohort'     => $action->cohortname,
+                    'year'       => $action->year,
+                    'shortname'  => $this->generate_shortname(
+                        $action->subject,
+                        $action->cohortname,
+                        $action->year
+                    ),
+                    'fullname'   => $this->generate_fullname(
+                        $action->subject,
+                        $action->cohortname,
+                        $action->year
+                    ),
+                    'exists'     => $action->existing !== null,
+                ];
+            }
+        }
+
+        return $preview;
+    }
     /**
     * Ejecuta la creación de cursos a partir de las acciones calculadas.
     *
-    * @param array<int, ActionMap> $actionmap
+    * @param array<int, CourseAction[]> $actionmap
     *  Mapa donde:
     *   - la clave es el ID de la cohorte
     *   - el valor es un array de ActionMaps asociadas a esa cohorte
