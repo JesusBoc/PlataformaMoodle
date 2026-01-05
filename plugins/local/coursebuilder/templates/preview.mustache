@@ -1,0 +1,54 @@
+<h2 class="mb-4">{{#str}} preview, local_coursebuilder {{/str}} — {{#str}} pluginname, local_coursebuilder {{/str}}</h2>
+
+<div class="local-coursebuilder-preview">
+
+    <div class="mb-3">
+        <span class="badge badge-primary">
+            {{#str}} cohorts, local_coursebuilder {{/str}}: {{cohortcount}}
+        </span>
+        <span class="badge badge-success ml-2">
+            {{#str}} creatingcourses, local_coursebuilder {{/str}}: {{createcount}}
+        </span>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        {{#cohorts}}
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3">
+          <div class="card" style="max-width: 500px; margin:auto">
+            <div class="card-header">
+                <strong>{{name}}</strong> - {{year}}
+            </div>
+            <ul class="list-group list-group-flush">
+                {{#actions}}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        {{#icon}}
+                            {{#pix}}
+                                {{icon}}, core
+                            {{/pix}}
+                        {{/icon}}
+                        <strong>{{fullname}}</strong>
+                        <br>
+                        <small class="text-muted">{{shortname}}</small>
+                    </div>
+
+                    <span class="badge badge-{{badge}}">
+                        {{label}}
+                    </span>
+                </li>
+                {{/actions}}
+            </ul>
+          </div>
+        </div>
+        {{/cohorts}}
+      </div>
+    </div>
+
+</div>
+
+<form method="post" action="{{executeurl}}">
+    <input type="hidden" name="sesskey" value="{{sesskey}}">
+    <button type="submit" class="btn btn-primary btn-lg">
+        {{#str}} create, local_coursebuilder {{/str}} {{createcount}} {{#str}} courses, local_coursebuilder {{/str}}
+    </button>
+</form>
