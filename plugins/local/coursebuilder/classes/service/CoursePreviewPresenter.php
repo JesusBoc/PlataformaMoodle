@@ -47,6 +47,8 @@ class CoursePreviewPresenter {
             'cohorts' => $cohorts,
             'cohortcount' => $this->cohortcount,
             'createcount' => $this->createcount,
+            'executeurl' => new \moodle_url('/local/coursebuilder/execute.php'),
+            'sesskey' => sesskey()
         ];
         return $out;
     }
@@ -61,9 +63,9 @@ class CoursePreviewPresenter {
             $out[] = match ($action['action']) {
                 CourseAction::CREATE => [
                     'type' => 'create',
-                    'icon' => 'i/add',
+                    'icon' => 't/add',
                     'badge' => 'success',
-                    'label' => 'Se creará',
+                    'label' => get_string('willcreate', 'local_coursebuilder'),
                     'fullname' => $action['fullname'],
                     'shortname' => $action['shortname'],
                 ],
@@ -71,7 +73,7 @@ class CoursePreviewPresenter {
                     'type' => 'keep',
                     'icon' => 'i/checked',
                     'badge' => 'secondary',
-                    'label' => 'Ya existe',
+                    'label' => get_string('existing', 'local_coursebuilder'),
                     'fullname' => $action['fullname'],
                     'shortname' => $action['shortname'],
                 ],
@@ -79,7 +81,7 @@ class CoursePreviewPresenter {
                     'type' => 'error',
                     'icon' => 'i/warning',
                     'badge' => 'danger',
-                    'label' => 'Error',
+                    'label' => get_string('error', 'local_coursebuilder'),
                     'fullname' => '',
                     'shortname' => '',
                 ],

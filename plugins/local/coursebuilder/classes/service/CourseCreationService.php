@@ -159,13 +159,20 @@ class CourseCreationService{
     }
     private function enrol_cohort(int $courseid, int $cohortid): void
     {
+        global $DB;
         $plugin = enrol_get_plugin('cohort');
+        $studentroleid = $DB->get_field('role', 'id', ['shortname' => 'student'], MUST_EXIST);
 
         $instances = enrol_get_instances($courseid, true);
 
         foreach ($instances as $i) {
-            if ($i->enrol === 'cohort' && (int)$i->customint1 === $cohortid) {
-                return; // ya está matriculada
+            if ($i->enrol === 'cohort'
+            && (int)$i->customint1 === $cohortid
+            ) {
+                if ((int)$i->roleid === $studentroleid) {
+                    return;
+                }
+                $plugin->delete_instance($i);
             }
         }
     
@@ -175,6 +182,7 @@ class CourseCreationService{
                 'name'       => 'Cohorte',
                 'status'     => ENROL_INSTANCE_ENABLED,
                 'customint1' => $cohortid,
+                'roleid'     => $studentroleid,
             ]
         );
     }

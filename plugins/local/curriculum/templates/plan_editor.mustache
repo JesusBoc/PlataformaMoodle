@@ -29,8 +29,16 @@
                     {{^is_virtual}}
                     {{#id}}
                     <div class="area-actions">
-                        <a href="{{editurl}}" class="edit-area" data-areaid="{{id}}">✏️</a>
-                        <a href="#" class="delete-area" data-areaid="{{id}}">🗑️</a>
+                        <a href="{{editurl}}" class="edit-area" data-areaid="{{id}}">
+                            {{#pix}}
+                                t/edit, core
+                            {{/pix}}
+                        </a>
+                        <a href="#" class="delete-area" data-areaid="{{id}}">
+                            {{#pix}}
+                                t/delete, core
+                            {{/pix}}
+                        </a>
                         <div class="area-order-controls btn-group btn-group-sm">
                         <button type="button"
                                 class="btn btn-outline-secondary move-area-up"
@@ -68,8 +76,16 @@
                     {{^readonly}}
                     <span class="subject-actions">
                         <a href="#" class="edit-subject" 
-                        data-subjectid="{{id}}">✏️</a>
-                        <a href="#" class="delete-subject" data-subjectid="{{id}}">🗑️</a>
+                        data-subjectid="{{id}}">
+                            {{#pix}}
+                                t/edit, core
+                            {{/pix}}
+                        </a>
+                        <a href="#" class="delete-subject" data-subjectid="{{id}}">
+                            {{#pix}}
+                                t/delete, core
+                            {{/pix}}
+                        </a>
                         <div class="subject-order-controls btn-group btn-group-sm">
                         <button type="button"
                                 class="btn btn-outline-secondary move-subject-up"
