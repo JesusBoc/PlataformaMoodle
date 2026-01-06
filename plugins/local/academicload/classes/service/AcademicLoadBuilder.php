@@ -12,7 +12,7 @@ use local_coursebuilder\infrastructure\curriculum\PlanRepository;
 
 defined('MOODLE_INTERNAL') || die();
 
-class AcademicLoadPresenter {
+class AcademicLoadBuilder {
     public function __construct(
         private TeachingAssignmentRepository $assignmentRepo,
         private PlanRepository $planRepo,
@@ -20,7 +20,8 @@ class AcademicLoadPresenter {
         private UserRepository $userRepo,
         private int $categoryID
     )
-    {
+    {}
+    public function buildViewModel(){
         $plan = $this->planRepo->get_active_plan_by_category($this->categoryID);
         $cards = [];
         $cohorts = $this->cohortRepo->get_by_level($this->categoryID);

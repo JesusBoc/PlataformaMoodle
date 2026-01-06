@@ -1,0 +1,15 @@
+<div class="local-academicload container-fluid">
+    <div class="row">
+        {{#cohorts}}
+            <div class="col-12 col-lg-6 mb-4">
+                {{> local_academicload/cohort_card }}
+            </div>
+        {{/cohorts}}
+
+        {{^cohorts}}
+            <div class="alert alert-info">
+                {{#str}} nocohorts, local_academicload {{/str}}
+            </div>
+        {{/cohorts}}
+    </div>
+</div>

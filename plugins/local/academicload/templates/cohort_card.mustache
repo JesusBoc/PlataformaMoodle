@@ -1,0 +1,62 @@
+<div class="card mb-4 cohort-card" data-cohortid="{{cohortid}}">
+    
+    {{! ===== Header ===== }}
+    <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+        
+        <div class="mb-2 mb-md-0">
+            <h5 class="mb-0">
+                {{name}}
+                <small class="text-muted">· {{year}}</small>
+            </h5>
+        </div>
+
+        <div class="cohort-stats d-flex flex-wrap gap-2">
+            <span class="badge badge-secondary">
+                Total: {{total}}
+            </span>
+            <span class="badge badge-success">
+                Aplicadas: {{applied}}
+            </span>
+            <span class="badge badge-warning">
+                Pendientes: {{pending}}
+            </span>
+            <span class="badge badge-danger">
+                Error: {{error}}
+            </span>
+        </div>
+
+    </div>
+
+    {{! ===== Body ===== }}
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Docente</th>
+                        <th>Estado</th>
+                        <th class="text-right">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{#assignments}}
+                        {{> local_academicload/assignment_row }}
+                    {{/assignments}}
+
+                    {{^assignments}}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">
+                                No hay asignaciones configuradas
+                            </td>
+                        </tr>
+                    {{/assignments}}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>

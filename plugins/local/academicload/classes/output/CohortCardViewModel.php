@@ -34,7 +34,7 @@ class CohortCardViewModel {
         $this->name = $name;
         $this->year = $year;
         $this->assignments = $assignments;
-
+        $this->calculate();
     }
 
     private function calculate(): void{

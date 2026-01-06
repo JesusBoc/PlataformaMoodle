@@ -102,9 +102,9 @@ class TeachingAssignmentRepository {
     /**
      * Find pending assignments for a given cohort
      * 
-     * @return TeachingAssignment
+     * @return ?TeachingAssignment
      */
-    public function get_by_cohortid_subjectid(int $cohortid, int $subjectid): array{
+    public function get_by_cohortid_subjectid(int $cohortid, int $subjectid): ?TeachingAssignment{
         global $DB;
 
         $records = $DB->get_record($this->table, [
@@ -112,7 +112,7 @@ class TeachingAssignmentRepository {
             'subjectid' => $subjectid,
         ]);
 
-        return $records ? $this->map_records($records) : [];
+        return $records ? $this->map_records($records) : null;
     }
 
     /**

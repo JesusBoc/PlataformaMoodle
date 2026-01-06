@@ -17,7 +17,6 @@ $capabilities = [
         'captype'      => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes'   => [
-
         ],
     ],
 ];
