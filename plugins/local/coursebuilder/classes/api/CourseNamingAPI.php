@@ -2,6 +2,8 @@
 
 namespace local_coursebuilder\api;
 
+use core\exception\moodle_exception;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -13,10 +15,13 @@ final class CourseNamingApi {
      * Build the course shortname for a subject in a cohort.
      */
     public static function build_shortname(
-        string $subjectname,
-        string $cohortname,
-        int $year
+        int $subjectid,
+        int $cohortid,
     ): string {
+
+        $subjectname = static::get_subject_name($subjectid);
+        [$cohortname, $year] = static::get_cohort_name($cohortid);
+        
         $subjectcode = static::generate_subject_code($subjectname);
         $cohortcode = static::normalize_cohort_name($cohortname);
 
@@ -31,10 +36,11 @@ final class CourseNamingApi {
      * Build the full course name.
      */
     public static function build_fullname(
-        string $subjectname,
-        string $cohortname,
-        int $year
+        int $subjectid,
+        int $cohortid,
     ): string {
+        $subjectname = static::get_subject_name($subjectid);
+        [$cohortname, $year] = static::get_cohort_name($cohortid);
         $cohortcode = static::normalize_cohort_name($cohortname);
         return sprintf('%s - %s - %d',
             $subjectname,
@@ -42,6 +48,39 @@ final class CourseNamingApi {
             $year
         );
     }
+
+    private static function get_subject_name(int $subjectid): string{
+        global $DB;
+
+        $subject = $DB->get_record(
+            'local_curriculum_plan_subjects',
+            ['id' => $subjectid]
+        );
+
+        return $subject->subjectname;
+    }
+
+    private static function get_cohort_name(int $cohortid): array{
+        global $DB;
+
+        $cohort = $DB->get_record(
+            'cohort',
+            ['id' => $cohortid]
+        );
+
+        $parts = explode(' - ', $cohort->name);
+        if(count($parts) !== 2){
+            throw new moodle_exception(
+                'invalid_cohort_name',
+                'local_coursebuilder'
+            );
+        }
+
+        [$name, $year] = $parts;
+
+        return [(string)$name, (int)$year];
+    }
+
     private static function generate_subject_code(
         string $subjectname
     ): string{

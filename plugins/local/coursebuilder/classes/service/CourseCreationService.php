@@ -62,14 +62,12 @@ class CourseCreationService{
                     continue;
                 }
                 $fullname = CourseNamingApi::build_fullname(
-                    $action->subject->name,
-                    $action->cohortname,
-                    $action->year
+                    $action->subject->id,
+                    $cohortid
                 );
                 $shortname = CourseNamingApi::build_shortname(
-                    $action->subject->name,
-                    $action->cohortname,
-                    $action->year
+                    $action->subject->id,
+                    $cohortid
                 );
 
                 $course = new stdClass();
