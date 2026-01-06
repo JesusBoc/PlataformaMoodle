@@ -100,6 +100,22 @@ class TeachingAssignmentRepository {
     }
 
     /**
+     * Find pending assignments for a given cohort
+     * 
+     * @return TeachingAssignment
+     */
+    public function get_by_cohortid_subjectid(int $cohortid, int $subjectid): array{
+        global $DB;
+
+        $records = $DB->get_record($this->table, [
+            'cohortid' => $cohortid,
+            'subjectid' => $subjectid,
+        ]);
+
+        return $records ? $this->map_records($records) : [];
+    }
+
+    /**
      * Find retryable assignments
      * 
      * @return TeachingAssignment[]|null

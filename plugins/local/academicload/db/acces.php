@@ -11,4 +11,13 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
+
+    'local/academicload:docenteglobal' => [
+        'riskbitmask'  => RISK_PERSONAL,
+        'captype'      => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes'   => [
+
+        ],
+    ],
 ];

@@ -2,7 +2,6 @@
 
 namespace local_academicload\service;
 
-use Aws\RetryMiddleware;
 use local_academicload\domain\AssignmentStatus;
 use local_academicload\domain\TeachingAssignment;
 use local_academicload\repository\TeachingAssignmentRepository;
