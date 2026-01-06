@@ -3,10 +3,8 @@ namespace local_coursebuilder\service;
 
 require_once($CFG->dirroot . '/course/lib.php');
 
-use core\router\schema\objects\array_of_things;
 use local_coursebuilder\api\CourseNamingApi;
 use local_coursebuilder\domain\model\CourseAction;
-use local_coursebuilder\domain\model\SubjectDTO;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -29,14 +27,12 @@ class CourseCreationService{
                     'cohort'     => $action->cohortname,
                     'year'       => $action->year,
                     'shortname'  => CourseNamingApi::build_shortname(
-                        $action->subject->name,
-                        $action->cohortname,
-                        $action->year
+                        $action->subject->id,
+                        $cohortid
                     ),
                     'fullname'   => CourseNamingApi::build_fullname(
-                        $action->subject->name,
-                        $action->cohortname,
-                        $action->year
+                        $action->subject->id,
+                        $cohortid
                     ),
                     'exists'     => $action->existing !== null,
                 ];
