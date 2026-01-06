@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/academicload/db"
+       VERSION="2026010500"
+       COMMENT="XMLDB file for local_academicload plugin"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+
+    <TABLES>
+
+        <!-- ========================================================= -->
+        <!-- Table: local_academicload_assign                          -->
+        <!-- ========================================================= -->
+        <TABLE NAME="local_academicload_assign" COMMENT="Pedagogical teaching assignments per subject and cohort">
+
+            <FIELDS>
+
+                <FIELD NAME="id"
+                       TYPE="int"
+                       LENGTH="10"
+                       NOTNULL="true"
+                       SEQUENCE="true"
+                       COMMENT="Primary key"/>
+
+                <FIELD NAME="teacherid"
+                       TYPE="int"
+                       LENGTH="10"
+                       NOTNULL="true"
+                       COMMENT="User ID of the teacher"/>
+
+                <FIELD NAME="subjectid"
+                       TYPE="int"
+                       LENGTH="10"
+                       NOTNULL="true"
+                       COMMENT="Subject ID from local_curriculum"/>
+
+                <FIELD NAME="cohortid"
+                       TYPE="int"
+                       LENGTH="10"
+                       NOTNULL="true"
+                       COMMENT="Cohort ID representing the group/class"/>
+
+                <FIELD NAME="roleid"
+                       TYPE="int"
+                       LENGTH="10"
+                       NOTNULL="true"
+                       COMMENT="Role ID to assign in the course (default: editingteacher)"/>
+
+                <FIELD NAME="status"
+                       TYPE="char"
+                       LENGTH="20"
+                       NOTNULL="true"
+                       COMMENT="Assignment status: pending, applied, error"/>
+
+                <FIELD NAME="courseid"
+                       TYPE="int"
+                       LENGTH="10"
+                       NOTNULL="false"
+                       COMMENT="Resolved Moodle course ID, if available"/>
+
+                <FIELD NAME="errormessage"
+                       TYPE="text"
+                       NOTNULL="false"
+                       COMMENT="Last error message when applying the assignment"/>
+
+                <FIELD NAME="timecreated"
+                       TYPE="int"
+                       LENGTH="10"
+                       NOTNULL="true"
+                       COMMENT="Time when the assignment was created"/>
+
+                <FIELD NAME="timemodified"
+                       TYPE="int"
+                       LENGTH="10"
+                       NOTNULL="true"
+                       COMMENT="Last modification time"/>
+
+            </FIELDS>
+
+            <KEYS>
+
+                <KEY NAME="primary"
+                     TYPE="primary"
+                     FIELDS="id"/>
+
+                <KEY NAME="uniq_teacher_subject_cohort"
+                     TYPE="unique"
+                     FIELDS="teacherid, subjectid, cohortid"
+                     COMMENT="Ensure pedagogical uniqueness of assignment"/>
+
+            </KEYS>
+
+            <INDEXES>
+
+                <INDEX NAME="idx_cohortid"
+                       UNIQUE="false"
+                       FIELDS="cohortid"/>
+
+                <INDEX NAME="idx_subjectid"
+                       UNIQUE="false"
+                       FIELDS="subjectid"/>
+
+                <INDEX NAME="idx_status"
+                       UNIQUE="false"
+                       FIELDS="status"/>
+
+                <INDEX NAME="idx_courseid"
+                       UNIQUE="false"
+                       FIELDS="courseid"/>
+
+            </INDEXES>
+
+        </TABLE>
+
+    </TABLES>
+</XMLDB>

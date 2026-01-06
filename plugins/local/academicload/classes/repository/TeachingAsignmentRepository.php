@@ -1,0 +1,177 @@
+<?php
+
+namespace local_academicload\repository;
+
+use local_academicload\domain\AssignmentStatus;
+use local_academicload\domain\TeachingAssignment;
+
+defined('MOODLE_INTERNAL') || die();
+
+class TeachingAssignmentRepository {
+    private $table = 'local_academicload_assign';
+
+    
+    /**
+     * Insert a new teaching assignment
+     * @param TeachingAssignment $assignment
+     * The assignment to insert in the DB
+     * 
+     * @return int New assignment ID 
+     */
+    public function insert(TeachingAssignment $assignment): int{
+        global $DB;
+
+        $record['teacherid'] = $assignment->get_teacherid();
+        $record['subjectid'] = $assignment->get_subjectid();
+        $record['cohortid'] = $assignment->get_cohortid();
+        $record['roleid'] = $assignment->get_roleid();
+        $record['status'] = $assignment->get_status();
+        $record['timecreated'] = time();
+        $record['timemodified'] = time();
+
+        $id = $DB->insert_record($this->table, (object)$record);
+
+        $assignment->setID($id);
+
+        return $id;
+    }
+
+    public function get(int $id): ?TeachingAssignment {
+        global $DB;
+
+        $record = $DB->get_record($this->table,
+            ['id' => $id]
+        );
+
+        if(!$record){
+            return null;
+        }
+
+        return $this->map_to_entity($record);
+    }
+
+    public function get_unique(
+        int $teacherid,
+        int $subjectid,
+        int $cohortid
+    ){
+        global $DB;
+    
+        return $DB->get_record(
+            $this->table,
+            [
+                'teacherid' => $teacherid,
+                'subjectid' => $subjectid,
+                'cohortid' => $cohortid
+            ]
+        ) ?: null;
+    }
+
+    /**
+     * Find pending assignments for a given subject
+     * 
+     * @return TeachingAssignment[]
+     */
+    public function get_pending_by_subject(int $subjectid): array{
+        global $DB;
+
+        $records = $DB->get_records($this->table, [
+            'subjectid' => $subjectid,
+            'status' => AssignmentStatus::PENDING
+        ]);
+
+        return $records ? $this->map_records($records) : [];
+    }
+
+    /**
+     * Find pending assignments for a given cohort
+     * 
+     * @return TeachingAssignment[]
+     */
+    public function get_pending_by_cohort(int $cohortid): array{
+        global $DB;
+
+        $records = $DB->get_records($this->table, [
+            'cohortid' => $cohortid,
+            'status' => AssignmentStatus::PENDING
+        ]);
+
+        return $records ? $this->map_records($records) : [];
+    }
+
+    /**
+     * Find retryable assignments
+     * 
+     * @return TeachingAssignment[]|null
+     */
+    public function get_retryable(): array {
+        global $DB;
+
+        $sql = "status = :pending OR status = :error";
+
+        $params = [
+            'pending' => AssignmentStatus::PENDING,
+            'error' => AssignmentStatus::ERROR,
+        ];
+
+        $records = $DB->get_records_select(
+            $this->table,
+            $sql,
+            $params
+        );
+
+        return $records ? $this->map_records($records) : [];
+    }
+
+    public function mark_pending(int $id): void {
+        $this->update_record($id, [], AssignmentStatus::PENDING);
+    }
+
+    public function mark_applied(int $id, int $courseid): void {
+        $data['courseid'] = $courseid;
+        $data['errormessage'] = null;
+        $this->update_record($id, $data, AssignmentStatus::APPLIED);
+    }
+
+    public function mark_error(int $id, string $error): void {
+        $data['errormessage'] = $error;
+        $this->update_record($id, $data, AssignmentStatus::ERROR);
+    }
+
+    private function map_to_entity(object $record): TeachingAssignment{
+        return new TeachingAssignment(
+            (int)$record->id,
+            (int)$record->teacherid,
+            (int)$record->subjectid,
+            (int)$record->cohortid,
+            (int)$record->roleid,
+            (int)$record->year,
+            (string)$record->status
+        );
+    }
+
+    /**
+     * Maps an array of record for TeachingAsignments to an array of TeachingAssignments
+     * 
+     * @return TeachingAssignment[]
+     */
+    private function map_records(array $records): array{
+        $result = [];
+        foreach($records as $record){
+            $result[] = $this->map_to_entity($record);
+        }
+        return $result;
+    }
+
+    private function update_record(int $id, array $data, string $status): void{
+        global $DB;
+
+        $data['id'] = $id;
+        $data['status'] = $status;
+        $data['timemodified'] = time();
+
+        $DB->update_record($this->table, (object)$data);
+    }
+
+
+}
