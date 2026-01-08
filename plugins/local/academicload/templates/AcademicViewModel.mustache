@@ -12,4 +12,9 @@
             </div>
         {{/cohorts}}
     </div>
+    {{#js}}
+        require(['local_academicload/load_editor'], function(editor) {
+            editor.init();
+        });
+    {{/js}}
 </div>

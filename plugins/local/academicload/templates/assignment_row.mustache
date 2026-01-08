@@ -21,13 +21,20 @@
 
     <td class="text-right">
         {{#canassign}}
-            <button class="btn btn-sm btn-outline-primary js-assign">
+            <button class="btn btn-sm btn-outline-primary js-assign"
+            data-subjectid="{{subjectid}}"
+            data-cohortid="{{cohortid}}"
+            data-teacherid="{{teacherid}}"
+            >
                 Asignar
             </button>
         {{/canassign}}
 
         {{#canretry}}
-            <button class="btn btn-sm btn-outline-warning js-retry">
+            <button class="btn btn-sm btn-outline-warning js-retry"
+            data-subjectid="{{subjectid}}"
+            data-cohortid="{{cohortid}}"
+            data-teacherid="{{teacherid}}">
                 Reintentar
             </button>
         {{/canretry}}

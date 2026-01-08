@@ -70,7 +70,7 @@ class TeachingAssignment {
         return $this->roleid;
     }
 
-    public function get_status(): int {
+    public function get_status(): string {
         return $this->status;
     }
 
@@ -89,12 +89,16 @@ class TeachingAssignment {
     public function mark_error(): void{
         $this->status = AssignmentStatus::ERROR;
     }
-
+    /**
+     * Static method for creating TeachingAssignments's
+     * The default value for $roleid is 3 because of
+     * that is the id for the editingteacher role
+     */
     public static function create(
         int $teacherid,
         int $subjectid,
         int $cohortid,
-        int $roleid
+        int $roleid = 3
     ): TeachingAssignment {
         return new TeachingAssignment(
             0,

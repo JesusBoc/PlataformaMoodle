@@ -29,11 +29,7 @@ class TeachingAssignmentRepository {
         $record['timecreated'] = time();
         $record['timemodified'] = time();
 
-        $id = $DB->insert_record($this->table, (object)$record);
-
-        $assignment->setID($id);
-
-        return $id;
+        return $DB->insert_record($this->table, (object)$record);;
     }
 
     public function get(int $id): ?TeachingAssignment {
@@ -107,12 +103,12 @@ class TeachingAssignmentRepository {
     public function get_by_cohortid_subjectid(int $cohortid, int $subjectid): ?TeachingAssignment{
         global $DB;
 
-        $records = $DB->get_record($this->table, [
+        $record = $DB->get_record($this->table, [
             'cohortid' => $cohortid,
             'subjectid' => $subjectid,
         ]);
 
-        return $records ? $this->map_records($records) : null;
+        return $record ? $this->map_to_entity($record) : null;
     }
 
     /**
@@ -154,6 +150,31 @@ class TeachingAssignmentRepository {
         $this->update_record($id, $data, AssignmentStatus::ERROR);
     }
 
+    public function delete(int $id): bool {
+        global $DB;
+
+        if (!$DB->record_exists($this->table, ['id' => $id])) {
+            return false;
+        }
+
+        return $DB->delete_records($this->table, ['id' => $id]);
+    }
+
+    public function unassign(int $cohortid, int $subjectid){
+        $assignment = $this->get_by_cohortid_subjectid($cohortid, $subjectid);
+        if(!$assignment){
+            return;
+        }
+        $this->delete($assignment->get_id());
+    }
+
+    public function update_teacher(int $id, int $newTeacherID){
+        $this->update_record(
+            $id,
+            ['teacherid' => $newTeacherID]
+        );
+    }
+
     private function map_to_entity(object $record): TeachingAssignment{
         return new TeachingAssignment(
             (int)$record->id,
@@ -161,7 +182,6 @@ class TeachingAssignmentRepository {
             (int)$record->subjectid,
             (int)$record->cohortid,
             (int)$record->roleid,
-            (int)$record->year,
             (string)$record->status
         );
     }
@@ -179,12 +199,14 @@ class TeachingAssignmentRepository {
         return $result;
     }
 
-    private function update_record(int $id, array $data, string $status): void{
+    private function update_record(int $id, array $data, string $status = null): void{
         global $DB;
 
         $data['id'] = $id;
-        $data['status'] = $status;
         $data['timemodified'] = time();
+        if($status){
+            $data['status'] = $status;
+        }
 
         $DB->update_record($this->table, (object)$data);
     }
