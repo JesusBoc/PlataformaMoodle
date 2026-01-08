@@ -16,10 +16,8 @@ class AssignmentRowViewModel {
     public ?string $teachername;
 
     public string $status;
+    public string $statusbadge;
     public string $statuslabel;
-    public string $iconkey;
-    public string $iconcomponent;
-    public string $iconalt;
 
     public bool $can_assign;
     public bool $can_retry;
@@ -44,28 +42,22 @@ class AssignmentRowViewModel {
     private function map_status(): void{
         switch ($this->status) {
             case AssignmentStatus::APPLIED:
+                $this->statusbadge = 'success';
                 $this->statuslabel = get_string('statusapplied', 'local_academicload');
-                $this->iconkey = 'i/checked';
-                $this->iconcomponent = 'core';
-                $this->iconalt = $this->statuslabel;
-                $this->can_assign = false;
+                $this->can_assign = true;
                 $this->can_retry = false;
                 break;
 
             case AssignmentStatus::ERROR:
+                $this->statusbadge = 'danger';
                 $this->statuslabel = get_string('statuserror', 'local_academicload');
-                $this->iconkey = 'i/warning';
-                $this->iconcomponent = 'core';
-                $this->iconalt = $this->statuslabel;
                 $this->can_assign = false;
                 $this->can_retry = true;
                 break;
 
             default:
+                $this->statusbadge = 'warning';
                 $this->statuslabel = get_string('statuspending', 'local_academicload');
-                $this->iconkey = 'i/info';
-                $this->iconcomponent = 'core';
-                $this->iconalt = $this->statuslabel;
                 $this->can_assign = true;
                 $this->can_retry = false;
         }

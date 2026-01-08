@@ -5,15 +5,17 @@ use context;
 use core_form\dynamic_form;
 use context_system;
 use core\exception\required_capability_exception;
-use local_academicload\domain\TeachingAssignment;
-use local_academicload\repository\TeachingAssignmentRepository;
 use local_academicload\repository\UserRepository;
+use local_academicload\service\AcademicloadService;
+use local_academicload\service\CourseResolutionService;
+use local_academicload\infrastructure\TeacherEnrolmentManager;
+use local_academicload\repository\TeachingAssignmentRepository;
 use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
 class assign_modal extends dynamic_form {
-    private TeachingAssignmentRepository $assignmentRepo;
+    private AcademicloadService $manager;
     private UserRepository $userRepo;
 
     public function set_data_for_dynamic_submission(): void
@@ -23,7 +25,7 @@ class assign_modal extends dynamic_form {
         $cohortid = $this->optional_param('cohortid', 0, PARAM_INT);
 
         if($cohortid && $subjectid){
-            $assignment = $this->assignmentRepo->get_by_cohortid_subjectid(
+            $assignment = $this->manager->get_assignment(
                 $cohortid, 
                 $subjectid
             );
@@ -91,25 +93,15 @@ class assign_modal extends dynamic_form {
         }
         $teacherid = $data->teacherid == 0 ? null : $data->teacherid;
         if($teacherid){
-            $assignment = $this->assignmentRepo->get_by_cohortid_subjectid(
-               $data->cohortid,
-               $data->subjectid
+            $assignment = $this->manager->assign_teacher(
+                $teacherid,
+                $data->subjectid,
+                $data->cohortid
             );
-            if(!$assignment){
-                $assignment = TeachingAssignment::create(
-                    $teacherid,
-                    $data->subjectid,
-                    $data->cohortid
-                );
-                $this->assignmentRepo->insert($assignment);
-            } else {
-                $this->assignmentRepo->update_teacher(
-                    $assignment->get_id(),
-                    $teacherid
-                );
-            }
+            $this->manager->apply($assignment);
+            $this->manager->retry_pending();
         } else {
-            $this->assignmentRepo->unassign(
+            $this->manager->unassign(
                 $data->cohortid,
                 $data->subjectid
             );
@@ -119,9 +111,13 @@ class assign_modal extends dynamic_form {
         ];
     }
     protected function init_repositories(): void {
-        if (!isset($this->assignmentRepo)) {
-            $this->assignmentRepo = new TeachingAssignmentRepository();
+        if (!isset($this->userRepo)) {
             $this->userRepo = new UserRepository();
+            $this->manager = new AcademicloadService(
+                new TeachingAssignmentRepository,
+                new CourseResolutionService,
+                new TeacherEnrolmentManager
+            );
         }
     }
     protected function get_page_url_for_dynamic_submission(): moodle_url

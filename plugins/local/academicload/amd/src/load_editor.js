@@ -17,7 +17,6 @@ define([
 
                 const titlePromise = getString('assignteacher');
                 const toastPromise = getString('teacherassigned');
-                console.log("voy bien");
                 
                 Promise.all(
                     [titlePromise, toastPromise]

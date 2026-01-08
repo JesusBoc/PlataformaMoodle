@@ -14,7 +14,6 @@ class CourseResolutionService {
     ): ?stdClass{
 
         global $DB;
-
         if(!class_exists(CourseNamingApi::class)){
             return null;
         }

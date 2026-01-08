@@ -28,8 +28,9 @@ class TeachingAssignmentRepository {
         $record['status'] = $assignment->get_status();
         $record['timecreated'] = time();
         $record['timemodified'] = time();
-
-        return $DB->insert_record($this->table, (object)$record);;
+        $id = $DB->insert_record($this->table, (object)$record);
+        $assignment->setID($id);
+        return $id;
     }
 
     public function get(int $id): ?TeachingAssignment {
@@ -158,14 +159,6 @@ class TeachingAssignmentRepository {
         }
 
         return $DB->delete_records($this->table, ['id' => $id]);
-    }
-
-    public function unassign(int $cohortid, int $subjectid){
-        $assignment = $this->get_by_cohortid_subjectid($cohortid, $subjectid);
-        if(!$assignment){
-            return;
-        }
-        $this->delete($assignment->get_id());
     }
 
     public function update_teacher(int $id, int $newTeacherID){

@@ -1,9 +1,8 @@
 <?php
 
-namespace local_academicload\service;
+namespace local_academicload\infrastructure;
 
 use core\exception\moodle_exception;
-use core\plugininfo\enrol;
 
 defined('MOODLE_INTERNAL') || die();
 

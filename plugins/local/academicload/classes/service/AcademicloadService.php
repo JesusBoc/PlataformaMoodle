@@ -6,7 +6,7 @@ use local_academicload\domain\AssignmentStatus;
 use local_academicload\domain\TeachingAssignment;
 use local_academicload\repository\TeachingAssignmentRepository;
 use local_academicload\service\CourseResolutionService;
-use local_academicload\service\TeacherEnrolmentManager;
+use local_academicload\infrastructure\TeacherEnrolmentManager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -21,8 +21,9 @@ class AcademicloadService {
         int $teacherid,
         int $subjectid,
         int $cohortid,
-        int $roleid,
+        int $roleid = 3,
     ): TeachingAssignment {
+        $this->unassign($cohortid, $subjectid);
 
         $existing = $this->repository->get_unique(
             $teacherid,
@@ -31,7 +32,14 @@ class AcademicloadService {
         );
 
         if($existing) {
-            return $existing;
+            return new TeachingAssignment(
+                $existing->id,
+                $existing->teacherid,
+                $existing->subjectid,
+                $existing->cohortid,
+                $existing->roleid,
+                $existing->status
+            );
         }
 
         $assignment = TeachingAssignment::create(
@@ -46,6 +54,14 @@ class AcademicloadService {
         return $assignment;
     }
 
+    public function unassign(int $cohortid, int $subjectid){
+        $assignment = $this->repository->get_by_cohortid_subjectid($cohortid, $subjectid);
+        if(!$assignment){
+            return;
+        }
+        $this->repository->delete($assignment->get_id());
+    }
+
     public function apply(
         TeachingAssignment $assignment
     ): void {
@@ -56,7 +72,7 @@ class AcademicloadService {
             $assignment->get_subjectid(),
             $assignment->get_cohortid()
         );
-
+        
         if(!$course){
             return;
         }
@@ -92,5 +108,8 @@ class AcademicloadService {
         foreach ($assignments as $assignment){
             $this->apply($assignment);
         }
+    }
+    public function get_assignment(int $cohortid, int $subjectid){
+        return $this->repository->get_by_cohortid_subjectid($cohortid, $subjectid);
     }
 }

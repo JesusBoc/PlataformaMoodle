@@ -32,9 +32,7 @@ class AcademicViewModel implements renderable, templatable{
                     'teachername' => $assignment->teachername,
                     'status' => $assignment->status,
                     'statuslabel' => $assignment->statuslabel,
-                    'iconkey' => $assignment->iconkey,
-                    'iconcomponent' => $assignment->iconcomponent,
-                    'iconalt' => $assignment->iconalt,
+                    'statusbadge' => $assignment->statusbadge,
                     'canassign' => $assignment->can_assign,
                     'canretry' => $assignment->can_retry,
                 ];
