@@ -18,3 +18,4 @@ $string['teacher'] = 'Docente';
 $string['status'] = 'Estado';
 $string['actions'] = 'Acciones';
 $string['noassignments'] = 'No hay asignaciones configuradas';
+$string['assignteacher'] = 'Asignar docente';
