@@ -140,6 +140,10 @@ class TeachingAssignmentRepository {
         $this->update_record($id, [], AssignmentStatus::PENDING);
     }
 
+    public function mark_nocourse(int $id): void {
+        $this->update_record($id, [], AssignmentStatus::NO_COURSE);
+    }
+
     public function mark_applied(int $id, int $courseid): void {
         $data['courseid'] = $courseid;
         $data['errormessage'] = null;

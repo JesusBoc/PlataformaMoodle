@@ -23,13 +23,13 @@ $PAGE->set_url(
 $PAGE->set_context($context);
 $PAGE->set_title(
     get_string(
-        'academicload',
+        'pluginname',
         'local_academicload'
     )
 );
 $PAGE->set_heading(
     get_string(
-        'academicload',
+        'pluginname',
         'local_academicload'
     )
 );

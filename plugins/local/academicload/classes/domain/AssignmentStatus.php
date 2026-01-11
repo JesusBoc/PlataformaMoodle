@@ -8,6 +8,7 @@ final class AssignmentStatus {
 
     public const PENDING = 'pending';
     public const APPLIED = 'applied';
+    public const NO_COURSE = 'nocourse';
     public const ERROR = 'error';
 
     public static function is_valid(string $status): bool{
@@ -15,6 +16,7 @@ final class AssignmentStatus {
             self::PENDING,
             self::APPLIED,
             self::ERROR,
+            self::NO_COURSE,
         ], true);
     }
 }

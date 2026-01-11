@@ -74,6 +74,9 @@ class AcademicloadService {
         );
         
         if(!$course){
+            $this->repository->mark_nocourse(
+                $assignment->get_id()
+            );
             return;
         }
 

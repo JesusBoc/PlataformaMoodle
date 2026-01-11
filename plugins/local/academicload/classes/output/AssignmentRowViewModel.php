@@ -54,6 +54,13 @@ class AssignmentRowViewModel {
                 $this->can_assign = false;
                 $this->can_retry = true;
                 break;
+            
+            case AssignmentStatus::NO_COURSE:
+                $this->statusbadge = 'warning';
+                $this->statuslabel = get_string('statusnocourse', 'local_academicload');
+                $this->can_assign = true;
+                $this->can_retry = true;
+                break;
 
             default:
                 $this->statusbadge = 'warning';

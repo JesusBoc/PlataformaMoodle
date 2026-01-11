@@ -24,6 +24,6 @@ class CourseResolutionService {
         );
         return $DB->get_record('course', [
             'shortname' => $shortname
-        ]) ?? null;
+        ]) ?: null;
     }
 }

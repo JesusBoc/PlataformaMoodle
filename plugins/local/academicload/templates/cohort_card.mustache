@@ -12,16 +12,16 @@
 
         <div class="cohort-stats d-flex flex-wrap gap-2">
             <span class="badge badge-secondary">
-                Total: {{total}}
+                {{#str}} total, local_academicload {{/str}}: {{total}}
             </span>
             <span class="badge badge-success">
-                Aplicadas: {{applied}}
+                {{#str}} applied, local_academicload {{/str}}: {{applied}}
             </span>
             <span class="badge badge-warning">
-                Pendientes: {{pending}}
+                {{#str}} pending, local_academicload {{/str}}: {{pending}}
             </span>
             <span class="badge badge-danger">
-                Error: {{error}}
+                {{#str}} error, local_academicload {{/str}}: {{error}}
             </span>
         </div>
 
@@ -40,10 +40,10 @@
                 </colgroup>
                 <thead class="thead-light">
                     <tr>
-                        <th>Asignatura</th>
-                        <th>Docente</th>
-                        <th>Estado</th>
-                        <th class="text-right">Acciones</th>
+                        <th>{{#str}} subject, local_academicload {{/str}}</th>
+                        <th>{{#str}} teacher, local_academicload {{/str}}</th>
+                        <th>{{#str}} status, local_academicload {{/str}}</th>
+                        <th class="text-right">{{#str}} actions, local_academicload {{/str}}</th>
                     </tr>
                 </thead>
 

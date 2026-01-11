@@ -9,7 +9,7 @@
             {{teachername}}
         {{/teachername}}
         {{^teachername}}
-            <span class="text-muted">Sin asignar</span>
+            <span class="text-muted">{{#str}} unassigned, local_academicload {{/str}}</span>
         {{/teachername}}
     </td>
 
@@ -26,8 +26,9 @@
             data-subjectid="{{subjectid}}"
             data-cohortid="{{cohortid}}"
             data-teacherid="{{teacherid}}"
+            data-action="{{assign}}"
             >
-                Asignar
+                {{#str}} assign, local_academicload {{/str}}
             </button>
         {{/canassign}}
 
@@ -35,8 +36,10 @@
             <button class="btn btn-sm btn-outline-warning js-retry"
             data-subjectid="{{subjectid}}"
             data-cohortid="{{cohortid}}"
-            data-teacherid="{{teacherid}}">
-                Reintentar
+            data-teacherid="{{teacherid}}"
+            data-action="{{retry}}"
+            >
+                {{#str}} retry, local_academicload {{/str}}
             </button>
         {{/canretry}}
     </td>
